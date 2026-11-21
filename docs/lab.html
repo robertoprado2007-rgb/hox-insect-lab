@@ -33,7 +33,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);fo
 [hidden]{display:none!important}
 button,select,input{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-.app{height:max(700px,calc(100vh - 64px));display:flex;flex-direction:column;gap:10px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.app{min-height:calc(100vh - 64px);display:flex;flex-direction:column;gap:10px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
 .brand{display:flex;align-items:baseline;gap:10px;min-width:0}
 .brand h1{font-family:var(--f-display);font-weight:700;font-size:22px;letter-spacing:-.01em;margin:0}
@@ -44,7 +44,7 @@ button,select,input{font:inherit;color:inherit}
 .btn:hover{border-color:var(--accent)}
 .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 select.btn{padding-right:28px}
-.bench{flex:1;display:grid;grid-template-columns:250px minmax(0,1fr) 340px;grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"list stage sheet" "list grid sheet";gap:10px;min-height:0}
+.bench{flex:1;display:grid;grid-template-columns:250px minmax(0,1fr) 340px;grid-template-rows:minmax(440px,1fr) auto;grid-template-areas:"list stage sheet" "list grid sheet";gap:10px;min-height:0}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;min-height:0;min-width:0}
 .list{grid-area:list;display:flex;flex-direction:column;overflow:hidden}
 .list .head{padding:10px;display:grid;gap:8px;border-bottom:1px solid var(--line)}
@@ -153,6 +153,7 @@ a{color:var(--accent)}
 .tnav{display:flex;gap:6px;align-items:center;flex-wrap:wrap} .tnav span{flex:1}
 details summary{cursor:pointer;font-family:var(--f-display);font-weight:700;font-size:15px}
 details p,details li{color:var(--muted);font-size:12.5px;max-width:65ch}
+@media (min-width:1181px){ .list,.sheet{contain:size} } /* side columns scroll inside; they must not stretch the page */
 @media (max-width:1180px){
   .app{height:auto}
   .bench{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"stage" "grid" "sheet" "list"}
