@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lab · Hox Insect Lab</title>
+<meta name="description" content="Switch Hox genes on and off in real insects and watch the 3D body change. Try four wings, legs on the head and more.">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="vendor/fonts/fonts.css">
+<link rel="stylesheet" href="assets/chrome.css">
+<script>(function(){try{var t=localStorage.getItem('hox-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
+<style>
+/* Layout: lab bench. Specimen drawer (left) | 3D stage over the Hox stain grid (centre) | record sheet (right). Stacks to one column on phones. */
+:root{
+  --bg:#FFFBF2; --panel:#FFFFFF; --ink:#1F2A37; --muted:#5B6676; --line:#E6DFD0; --chip:#F3ECDC;
+  --accent:#0E7C66; --accent-ink:#FFFFFF; --stage-a:#FFF4DC; --stage-b:#E8DBBC;
+  --ok:#1D7440; --ok-bg:#DDF0E3; --warn:#8E5300; --warn-bg:#F7E9D2; --bad:#A3283C; --bad-bg:#F8DFE3; --focus:#0E7C66;
+  --f-display:"Fredoka","Nunito",system-ui,sans-serif;
+  --f-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --g-lab:#7652C8; --g-pb:#3F6FD8; --g-Dfd:#1B97B5; --g-Scr:#23A06A; --g-Antp:#93AE1C; --g-Ubx:#DDA015; --g-abdA:#E0662A; --g-AbdB:#C93252;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#14181F; --panel:#1C222B; --ink:#EEF1F5; --muted:#A6B0BD; --line:#2E3642; --chip:#262E3A;
+  --accent:#3CC9A5; --accent-ink:#04201C; --stage-a:#252E3A; --stage-b:#0E1217;
+  --ok:#62CC86; --ok-bg:#15301F; --warn:#E8AC52; --warn-bg:#34260F; --bad:#F08A9B; --bad-bg:#3A1820; --focus:#3CC9A5; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#14181F; --panel:#1C222B; --ink:#EEF1F5; --muted:#A6B0BD; --line:#2E3642; --chip:#262E3A;
+  --accent:#3CC9A5; --accent-ink:#04201C; --stage-a:#252E3A; --stage-b:#0E1217;
+  --ok:#62CC86; --ok-bg:#15301F; --warn:#E8AC52; --warn-bg:#34260F; --bad:#F08A9B; --bad-bg:#3A1820; --focus:#3CC9A5; color-scheme:dark }
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.app{height:max(700px,calc(100vh - 64px));display:flex;flex-direction:column;gap:10px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand h1{font-family:var(--f-display);font-weight:700;font-size:22px;letter-spacing:-.01em;margin:0}
+.brand span{color:var(--muted);font-size:12.5px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto;align-items:center;min-width:0;max-width:100%}
+#preset{max-width:100%;min-width:0;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 11px;cursor:pointer;font-size:13px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+select.btn{padding-right:28px}
+.bench{flex:1;display:grid;grid-template-columns:250px minmax(0,1fr) 340px;grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"list stage sheet" "list grid sheet";gap:10px;min-height:0}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;min-height:0;min-width:0}
+.list{grid-area:list;display:flex;flex-direction:column;overflow:hidden}
+.list .head{padding:10px;display:grid;gap:8px;border-bottom:1px solid var(--line)}
+.list input,.list select{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:7px;padding:6px 9px}
+.list .count{font-size:12px;color:var(--muted)}
+.splist{overflow:auto;padding:4px;flex:1;min-height:0;position:relative}
+.sp{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 8px;width:100%;text-align:left;border:0;background:none;padding:7px 8px;border-radius:7px;cursor:pointer}
+.sp:hover{background:var(--chip)}
+.sp[aria-current="true"]{background:var(--accent);color:var(--accent-ink)}
+.sp i{font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp small{grid-column:1;color:inherit;opacity:.72;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp .cov{grid-row:1/3;grid-column:2;align-self:center;font-family:var(--f-mono);font-size:11px;opacity:.8}
+.stage{grid-area:stage;position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--line);background:radial-gradient(120% 90% at 50% 35%,var(--stage-a),var(--stage-b));min-height:300px}
+.stage canvas{position:absolute;inset:0;display:block;touch-action:none}
+.labels{position:absolute;inset:0;pointer-events:none;z-index:1}
+.seglabel{font-family:var(--f-mono);font-size:10.5px;line-height:1;padding:3px 5px;border-radius:5px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);color:var(--ink);white-space:nowrap;display:flex;gap:4px;align-items:center}
+.seglabel b{font-weight:500;font-style:italic}
+.seglabel em{font-style:normal;color:var(--muted)}
+.seglabel.changed{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+.overlay{position:absolute;display:flex;gap:6px;flex-wrap:wrap;z-index:2}
+.overlay.tl{top:10px;left:10px;right:10px}
+.overlay.bl{left:10px;bottom:10px;right:10px;align-items:flex-end;justify-content:space-between}
+.tog{border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 90%,transparent);border-radius:999px;padding:4px 10px;font-size:12px;cursor:pointer}
+.tog[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 10px;font-family:var(--f-mono);font-size:11px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-radius:8px;padding:5px 8px}
+.legend span{display:inline-flex;gap:4px;align-items:center;font-style:italic}
+.status{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);white-space:nowrap}
+.status.mut{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.nogl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted)}
+.tip{position:absolute;pointer-events:none;z-index:3;font-size:12px;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:6px 8px;max-width:240px;box-shadow:0 4px 14px rgb(0 0 0/.12)}
+.toast{position:absolute;left:50%;top:52px;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 12px;border-radius:8px;z-index:4;max-width:90%;text-align:center}
+.gridp{grid-area:grid;padding:10px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.gridp header{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}
+.gridp h2,.sheet h2{font-family:var(--f-display);font-size:15px;font-weight:700;margin:0;letter-spacing:-.005em}
+.hint{color:var(--muted);font-size:12px}
+.gridwrap{overflow-x:auto}
+table.hox{border-collapse:separate;border-spacing:2px;font-size:12px}
+table.hox th{font-weight:500;color:var(--muted);font-family:var(--f-mono);font-size:10.5px;padding:0 1px}
+table.hox th.reg{color:var(--ink);font-family:var(--f-body);font-size:11px;letter-spacing:.06em;text-transform:uppercase;text-align:left;border-bottom:1px solid var(--line)}
+table.hox td.gene{white-space:nowrap;padding-right:6px}
+.gname{display:flex;align-items:center;gap:6px}
+.gname i{font-family:var(--f-mono);font-size:12.5px}
+.gname small{color:var(--muted);font-size:10.5px}
+.rowbtn{border:1px solid var(--line);background:none;border-radius:5px;font-size:10.5px;padding:1px 5px;cursor:pointer;color:var(--muted)}
+.rowbtn:hover{color:var(--ink);border-color:var(--accent)}
+.cell{width:26px;height:22px;border-radius:4px;border:1px solid var(--line);background:var(--bg);cursor:pointer;padding:0;display:block;position:relative}
+.cell.on{background:var(--gc);border-color:transparent}
+.cell.def::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-2px;border-radius:50%;background:var(--muted);opacity:.55}
+.cell.on.def::after{background:#fff;opacity:.8}
+.cell.gain{box-shadow:0 0 0 2px var(--ink) inset}
+.cell.loss{background:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--gc) 55%,transparent) 3px 5px)}
+tr.idrow td{font-family:var(--f-mono);font-size:10.5px;text-align:center;color:var(--muted);padding-top:3px}
+tr.idrow td.chg{color:var(--warn);font-weight:500}
+.sheet{grid-area:sheet;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:16px}
+.sp-title{font-family:var(--f-display);font-size:21px;font-weight:700;line-height:1.15;margin:0;font-style:italic;text-wrap:balance}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{background:var(--chip);border-radius:999px;padding:2px 9px;font-size:12px}
+table.rec{width:100%;border-collapse:collapse;font-size:12.5px}
+table.rec th{text-align:left;color:var(--muted);font-weight:500;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:4px 4px;border-bottom:1px solid var(--line)}
+table.rec td{padding:5px 4px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;vertical-align:top}
+table.rec td.sym{font-family:var(--f-mono);font-size:11.5px;word-break:break-all}
+table.rec .miss{color:var(--muted)}
+a{color:var(--accent)}
+.note{color:var(--muted);font-size:12px;margin:6px 0 0}
+.changes{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.changes li{border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:grid;gap:4px}
+.changes .what{font-size:13px}
+.changes .what b{font-family:var(--f-mono);font-weight:500}
+.ev{font-size:11.5px;border-radius:6px;padding:3px 7px;justify-self:start}
+.ev.doc{background:var(--ok-bg);color:var(--ok)}
+.ev.ext{background:var(--warn-bg);color:var(--warn)}
+.ev.bad{background:var(--bad-bg);color:var(--bad)}
+.empty{color:var(--muted);font-size:13px}
+.preview{margin:0;font-size:12.5px;background:var(--chip);border-radius:8px;padding:7px 10px;min-height:2.8em;max-width:100ch}
+.gbtn{border:0;background:none;padding:0;cursor:pointer;color:inherit;font:inherit}
+.gbtn:hover i,.gbtn:focus-visible i{text-decoration:underline}
+.guide dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:8px 0 6px;font-size:12.5px}
+.guide dt{color:var(--muted)} .guide dd{margin:0}
+.changes .means{font-size:12px;color:var(--muted)}
+.hypo{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:8px}
+.hypo summary{font-family:var(--f-body);font-weight:500;font-size:13px;display:flex;gap:6px;align-items:baseline}
+.hypo p{font-size:12.5px;color:var(--ink);margin:6px 0}
+.pl{font-size:11px;border-radius:999px;padding:1px 7px;text-transform:capitalize;flex:none}
+.pl-likely{background:var(--ok-bg);color:var(--ok)} .pl-possible{background:var(--chip);color:var(--ink)} .pl-unlikely{background:var(--warn-bg);color:var(--warn)}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);z-index:40;background:var(--panel);border-left:1px solid var(--line);box-shadow:-8px 0 30px rgb(0 0 0/.18);display:flex;flex-direction:column;gap:10px;overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 14px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) 18px}
+.dhead{display:flex;justify-content:space-between;align-items:center}
+.lstitle{font-family:var(--f-display);font-size:20px;margin:0;text-wrap:balance}
+.dots{display:flex;gap:6px;flex-wrap:wrap}
+.ldot{width:22px;height:8px;border-radius:999px;border:1px solid var(--line);background:var(--chip);padding:0;cursor:pointer}
+.ldot.done{background:var(--ok-bg);border-color:var(--ok)} .ldot.on{background:var(--accent);border-color:var(--accent)}
+#lsBody p{max-width:62ch;margin:0 0 10px;font-size:14px}
+.trybox{border:1px dashed var(--line);border-radius:8px;padding:10px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin:4px 0 12px}
+.trybox p{margin:0!important;flex-basis:100%}
+.quiz{border-top:1px solid var(--line);padding-top:10px;display:grid;gap:6px}
+.qq{font-weight:600;margin:0 0 4px!important}
+.qopt{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:13.5px}
+.qopt:hover:not(:disabled){border-color:var(--accent)} .qopt:disabled{cursor:default}
+.qopt.right{border-color:var(--ok);background:var(--ok-bg)} .qopt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.qfb{font-size:13px;margin:4px 0 0!important}
+.lsnav{display:flex;justify-content:space-between;margin-top:auto;padding-top:8px}
+.tour{position:fixed;inset:0;z-index:60;pointer-events:none}
+.spot{position:fixed;border-radius:10px;box-shadow:0 0 0 9999px rgb(6 10 12/.55);outline:2px solid var(--accent);transition:all .3s ease}
+.tourbox{position:fixed;pointer-events:auto;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:0 10px 30px rgb(0 0 0/.25);transition:top .3s ease,left .3s ease}
+.tourbox h3{font-family:var(--f-display);font-size:16px;margin:4px 0 6px} .tourbox p{margin:0 0 10px;font-size:13.5px}
+.tnav{display:flex;gap:6px;align-items:center;flex-wrap:wrap} .tnav span{flex:1}
+details summary{cursor:pointer;font-family:var(--f-display);font-weight:700;font-size:15px}
+details p,details li{color:var(--muted);font-size:12.5px;max-width:65ch}
+@media (max-width:1180px){
+  .app{height:auto}
+  .bench{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"stage" "grid" "sheet" "list"}
+  .stage{height:58vh;min-height:340px}
+  .list{max-height:460px}
+  .sheet{overflow:visible}
+  .tools{margin-left:0}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
+
+/* ---- Lab page additions: banner, Scientist mode switch, kid view ---- */
+.brand h1{font-weight:600;white-space:nowrap}
+.banner{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;background:var(--warn-bg);color:var(--ink);border:1px solid var(--line);border-left:6px solid #F2A93B;border-radius:10px;padding:10px 14px}
+.banner[hidden]{display:none}
+.banner .bt{flex:1 1 280px;min-width:0}
+.banner b.h{font-family:var(--f-display);font-weight:600;font-size:16px;display:block}
+.banner .lf{font-size:14px;margin:2px 0 0}
+.banner a{font-weight:700;color:var(--accent)}
+.switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:4px 12px 4px 5px;cursor:pointer;font-size:13px;min-height:36px}
+.switch .track{width:40px;height:24px;border-radius:999px;background:var(--chip);border:1px solid var(--muted);position:relative;flex:none;transition:background .2s}
+.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--muted);transition:transform .2s,background .2s}
+.switch[aria-checked="true"] .track{background:var(--accent);border-color:var(--accent)}
+.switch[aria-checked="true"] .track::after{transform:translateX(16px);background:var(--accent-ink)}
+.switch:hover{border-color:var(--accent)}
+html:not(.sci) .sci-only{display:none!important}
+html:not(.sci) body{font-size:16px}
+html:not(.sci) .btn{min-height:44px;padding:8px 14px;font-size:15px;border-radius:10px}
+html:not(.sci) .switch{min-height:44px}
+html:not(.sci) .tog{min-height:40px;padding:6px 14px;font-size:14px}
+html:not(.sci) .cell{width:26px;height:30px}
+html:not(.sci) .sp{padding:10px 10px}
+html:not(.sci) .rowbtn{min-height:28px;min-width:30px;font-size:12px}
+html:not(.sci) .changes .what{font-size:15px}
+html:not(.sci) .preview{font-size:14.5px}
+.cov{display:none}
+html.sci .cov{display:block}
+@media (pointer:coarse){ .tog{min-height:44px} .rowbtn{min-height:36px;min-width:40px} }
+@media (prefers-reduced-motion: reduce){ .switch .track,.switch .track::after{transition:none} }
+</style>
+
+</head>
+<body>
+{{header}}
+<div class="app">
+  <header class="top">
+    <div class="brand"><h1>The Lab</h1><span id="tagline">Switch genes on and off. Watch the body change.</span></div>
+    <div class="tools">
+      <button id="learnBtn" class="btn" type="button">Learn</button>
+      <button id="tourBtn" class="btn" type="button">Take the tour</button>
+      <label class="hint" for="preset">Fun mutants</label>
+      <select id="preset" class="btn"><option value="">Pick a fun mutant…</option></select>
+      <button id="randomBtn" class="btn" type="button">Surprise me</button>
+      <button id="resetBtn" class="btn primary" type="button">Reset to normal</button>
+      <button id="sciSw" class="switch" type="button" role="switch" aria-checked="false"><span class="track" aria-hidden="true"></span><span>Scientist mode</span></button>
+    </div>
+  </header>
+  <div class="banner" id="lessonBanner" role="status" hidden>
+    <div class="bt"><b class="h" id="lbTitle"></b><p class="lf" id="lbLook"></p></div>
+    <a id="lbBack" href="learn.html">Back to the lesson</a>
+    <button class="btn" id="lbClose" type="button" aria-label="Dismiss lesson banner">Dismiss</button>
+  </div>
+  <main class="bench">
+    <aside class="panel list" aria-label="Species">
+      <div class="head">
+        <input id="search" type="search" placeholder="Search species, family, order" aria-label="Search species">
+        <select id="orderSel" aria-label="Filter by order"></select>
+        <div class="count" id="spCount"></div>
+      </div>
+      <div class="splist" id="splist" role="list"></div>
+    </aside>
+
+    <section class="stage" id="stage" aria-label="3D model">
+      <div class="overlay tl">
+        <button class="tog" id="tLabels" type="button" aria-pressed="true">Hox labels</button>
+        <button class="tog" id="tStain" type="button" aria-pressed="false">Hox stain</button>
+        <button class="tog" id="tPose" type="button" aria-pressed="true">Wings spread</button>
+        <button class="tog" id="tAnim" type="button" aria-pressed="true">Flight</button>
+        <button class="tog" id="tCam" type="button" aria-pressed="false">Recenter</button>
+      </div>
+      <div class="overlay bl">
+        <div class="legend" id="legend"></div>
+        <div class="status" id="status">Normal body</div>
+      </div>
+      <div class="tip" id="tip" hidden></div>
+      <div class="toast" id="toast" hidden></div>
+    </section>
+
+    <section class="panel gridp" aria-label="Hox expression editor">
+      <header><h2>Hox expression map</h2><span class="hint">Click or drag across cells to switch a gene on or off in a segment. Dots mark the wild-type domain.</span></header>
+      <p class="preview" id="preview" aria-live="polite">Point at a cell (or tab to it) to see what switching that gene on or off would do before you click.</p>
+      <div class="gridwrap"><table class="hox" id="hoxgrid"></table></div>
+    </section>
+
+    <aside class="panel sheet" aria-label="Species record">
+      <div>
+        <h2 class="sp-title" id="spName"></h2>
+        <div id="spCommon" class="hint"></div>
+        <div class="meta" id="spMeta"></div>
+      </div>
+      <div class="sci-only">
+        <h2>Hox gene records</h2>
+        <table class="rec" id="recTable"></table>
+        <p class="note">Records from NCBI Gene orthologs. A dash means NCBI has no annotated ortholog for this species, which often reflects annotation gaps rather than a missing gene.</p>
+      </div>
+      <div>
+        <h2>What changed</h2>
+        <ul class="changes" id="changes"></ul>
+      </div>
+      <div>
+        <h2>Gene guide</h2>
+        <div id="geneGuide"></div>
+      </div>
+      <div class="sci-only">
+        <h2>Unexplored mutants</h2>
+        <p class="note" id="hypoMeta"></p>
+        <div id="hypos"></div>
+      </div>
+      <div class="sci-only">
+        <h2>Simulation atlas</h2>
+        <p class="note" id="atlasMeta"></p>
+        <select id="atlasFilter" class="btn" aria-label="Filter outcomes by rating"><option value="">All ratings</option><option value="likely">Likely</option><option value="possible">Possible</option><option value="unlikely">Unlikely</option></select>
+        <div id="atlas"></div>
+      </div>
+      <details class="sci-only">
+        <summary>How the model works</summary>
+        <p>Insects share a set of eight Hox genes, usually clustered on one chromosome in the order they act along the body: <i>lab, pb, Dfd, Scr, Antp, Ubx, abd-A, Abd-B</i>. In some insects, including <i>Drosophila</i>, the cluster is split in two. Each segment's identity comes from the most posterior Hox gene switched on in it (posterior prevalence), with a few combinatorial rules: <i>pb</i> with <i>Scr</i> makes a labium, <i>pb</i> without <i>Scr</i> makes a maxillary palp (even over <i>Antp</i>), and <i>Scr</i> outranks <i>Antp</i> in the first thoracic segment.</p>
+        <p>In this model, a segment with no Hox gene falls back to a ground state: an antenna-like ventral appendage (as in <i>Antp</i> loss, where legs become antennae) and, on the thorax or abdomen, a wing. The wing part is an extrapolation from the observation that the forewing needs no Hox input. Gnathal head segments with no Hox gene lose their mouthparts.</p>
+        <p>Order-level body plans set the style of each part, so the same identity change gives a haltere-to-wing switch in a fly and a hindwing-to-elytron switch in a beetle. The model ignores dose, timing, parasegment boundaries, cofactors and downstream targets, and Hox genes switching each other on or off, so treat extrapolated results as hypotheses. Some real results differ by species: in <i>Tribolium</i>, losing <i>Scr</i> also removes <i>pb</i> from the labium, and losing <i>abd-A</i> leaves small abdominal appendages, while this model applies one rule to every insect. Changes matched to a published experiment are marked Documented.</p>
+        <p>Not modelled: <i>zen</i>, <i>bcd</i> and <i>ftz</i> (Hox-derived genes without homeotic roles in insects), larval forms, caste and sex differences, and traits outside Hox control such as secondary winglessness.</p>
+      </details>
+      <p class="note sci-only" id="dataNote"></p>
+    </aside>
+  </main>
+</div>
+
+<aside class="drawer" id="learn" hidden aria-label="Lessons">
+  <div class="dhead"><span class="hint" id="lsCount"></span><button class="btn" id="lsClose" type="button">Close</button></div>
+  <h2 class="lstitle" id="lsTitle"></h2>
+  <div class="dots" id="lsDots"></div>
+  <div id="lsBody"></div>
+  <div class="lsnav"><button class="btn" id="lsPrev" type="button">Back</button><button class="btn primary" id="lsNext" type="button">Next lesson</button></div>
+</aside>
+<div class="tour" id="tour" hidden>
+  <div class="spot" id="tSpot"></div>
+  <div class="tourbox" id="tBox" role="dialog" aria-label="App tour" aria-live="polite">
+    <div class="hint" id="tCount"></div><h3 id="tTitle"></h3><p id="tText"></p>
+    <div class="tnav"><button class="btn" id="tSkip" type="button">End tour</button><button class="tog" id="tAuto" type="button" aria-pressed="false">Auto-play</button><span></span><button class="btn" id="tBack" type="button">Back</button><button class="btn primary" id="tNext" type="button">Next</button></div>
+  </div>
+</div>
+
+<script type="application/json" id="species-data">__SPECIES_JSON__</script>
+<script type="application/json" id="pheno-data">__PHENO_JSON__</script>
+<script type="application/json" id="hypo-data">__HYPO_JSON__</script>
+<script type="application/json" id="atlas-data">__ATLAS_JSON__</script>
+<script type="application/json" id="lessons-data">__LESSONS_JSON__</script>
+<script type="application/json" id="tour-data">__TOUR_JSON__</script>
+<script type="importmap">{"imports":{"three":"./vendor/three/three.module.js","three/addons/":"./vendor/three/addons/"}}</script>
+<script type="module">
+/* ---------- data ---------- */
+const DATA = JSON.parse(document.getElementById('species-data').textContent);
+const PHENO = JSON.parse(document.getElementById('pheno-data').textContent);
+const HYPO = JSON.parse(document.getElementById('hypo-data').textContent);
+const ATLAS = JSON.parse(document.getElementById('atlas-data').textContent);
+const LESSONS = JSON.parse(document.getElementById('lessons-data').textContent).lessons || [];
+const TOUR = JSON.parse(document.getElementById('tour-data').textContent).steps || [];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ENGINE:BEGIN — pure model code, shared with scripts/simulate.mjs (no DOM, no THREE) */
+const SEG = ['An','Ic','Mn','Mx','Lb','T1','T2','T3','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10'];
+const REGION = i => i <= 4 ? 'head' : i <= 7 ? 'thorax' : 'abdomen';
+const GENES = ['lab','pb','Dfd','Scr','Antp','Ubx','abdA','AbdB'];
+const GLABEL = {lab:'lab',pb:'pb',Dfd:'Dfd',Scr:'Scr',Antp:'Antp',Ubx:'Ubx',abdA:'abd-A',AbdB:'Abd-B'};
+const GNAME = {lab:'labial',pb:'proboscipedia',Dfd:'Deformed',Scr:'Sex combs reduced',Antp:'Antennapedia',Ubx:'Ultrabithorax',abdA:'abdominal-A',AbdB:'Abdominal-B'};
+const GCOL = {lab:'#7652C8',pb:'#3F6FD8',Dfd:'#1B97B5',Scr:'#23A06A',Antp:'#93AE1C',Ubx:'#DDA015',abdA:'#E0662A',AbdB:'#C93252'};
+const DOMAIN = {lab:[1,1],pb:[3,4],Dfd:[2,3],Scr:[4,5],Antp:[5,17],Ubx:[7,17],abdA:[9,15],AbdB:[15,17]};
+const RANK = ['AbdB','abdA','Ubx','Scr','pb','Antp','Dfd','lab']; // dominance order used by identityOf
+const normGene = g => ({'abd-A':'abdA','Abd-B':'AbdB','abdA':'abdA','AbdB':'AbdB'}[g] || g);
+
+function defaultExpr(){ const e={}; for(const g of GENES){ e[g]=new Uint8Array(18); const [a,b]=DOMAIN[g]; for(let i=a;i<=b;i++) e[g][i]=1; } return e; }
+const DEF = defaultExpr();
+
+function identityOf(i, e){
+  const has = g => !!e[g][i];
+  if(has('AbdB')) return 'PA';
+  if(has('abdA')) return 'AB';
+  if(has('Ubx')) return REGION(i)==='abdomen' ? 'A1' : 'T3';
+  if(has('Scr')) return has('pb') ? 'LB' : 'T1';
+  if(has('pb')) return 'MX'; // pb without Scr makes palps, even over Antp (ectopic pb turns legs into maxillary palps)
+  if(has('Antp')) return 'T2';
+  if(has('Dfd')) return 'MN';
+  if(has('lab')) return 'IC';
+  return i===0 ? 'AN' : i<=4 ? 'DELETED' : 'GROUND';
+}
+const dominantOf = (i,e) => RANK.find(g => e[g][i]) || null;
+const ID_NAME = {AN:'antennal',GROUND:'Hox-free ground state',IC:'intercalary',MN:'mandibular',MX:'maxillary',LB:'labial',T1:'prothoracic',T2:'mesothoracic',T3:'metathoracic',A1:'first abdominal',AB:'abdominal',PA:'posterior abdominal',DELETED:'appendage lost'};
+
+/* ---------- body-plan templates ---------- */
+const BASE = { body:0x6b5a45, accent:0x3b3026, sheen:0.3, metal:0, hairy:false, flat:[1,1],
+  head:{r:0.32, eye:1, eyeColor:0x2a2420, snout:0, stalk:0},
+  thorax:[[0.30,0.30],[0.48,0.37],[0.40,0.35]],
+  abd:{len:0.19, r0:0.34, r1:0.12, bulge:0.15, waist:false, bands:null},
+  ant:{style:'filiform', len:1.1}, mouth:'chewing',
+  legs:{len:[1.25,1.35,1.5], fore:'walk', hind:'walk', thick:1},
+  fore:{type:'membrane', S:2.0, C:0.9, color:0xdde6ec, alpha:0.3, vein:0x2f3438, pattern:'veins'},
+  hind:{type:'membrane', S:1.8, C:0.9, color:0xdde6ec, alpha:0.3, vein:0x2f3438, pattern:'veins'},
+  fold:'back', wingless:false, term:[], note:'' };
+
+const ORDERS = {
+  Diptera:{ body:0x86663a, accent:0x4a3920, head:{r:0.34,eye:1.55,eyeColor:0x9b2a1e}, thorax:[[0.16,0.28],[0.6,0.42],[0.18,0.32]],
+    abd:{len:0.14,r0:0.36,r1:0.1,bulge:0.25}, ant:{style:'aristate',len:0.55}, mouth:'sponging', legs:{len:[1.3,1.4,1.55]},
+    fore:{type:'membrane',S:2.1,C:0.82,color:0xe6edf2,alpha:0.32,pattern:'veins',irid:1}, hind:{type:'haltere',S:0.55} },
+  Hymenoptera:{ body:0x2a2018, accent:0x15100c, head:{r:0.36,eye:1.1,eyeColor:0x141414}, thorax:[[0.16,0.28],[0.55,0.4],[0.3,0.36]],
+    abd:{len:0.21,r0:0.38,r1:0.08,bulge:0.35,waist:true}, ant:{style:'elbowed',len:1.0}, mouth:'chewing', legs:{len:[1.25,1.4,1.65]},
+    fore:{type:'narrow',S:2.0,C:0.85,color:0xd8cfb4,alpha:0.28}, hind:{type:'small',S:1.45,C:0.6,color:0xd8cfb4,alpha:0.28}, term:['sting'] },
+  Lepidoptera:{ body:0x5c4d3c, accent:0x3a3026, hairy:true, head:{r:0.3,eye:1.3,eyeColor:0x2a2a2a}, thorax:[[0.18,0.3],[0.55,0.38],[0.34,0.34]],
+    abd:{len:0.19,r0:0.3,r1:0.12,bulge:0.1}, ant:{style:'pectinate',len:1.1}, mouth:'siphoning', legs:{len:[1.0,1.3,1.4]},
+    fore:{type:'tri',S:2.5,C:1.35,color:0x8a7a62,alpha:1,pattern:'moth'}, hind:{type:'round',S:2.0,C:1.35,color:0x9a8a72,alpha:1,pattern:'moth'}, fold:'roof' },
+  Coleoptera:{ body:0x5a2e1a, accent:0x2a140a, sheen:0.9, head:{r:0.28,eye:0.7}, thorax:[[0.42,0.4],[0.24,0.42],[0.24,0.44]],
+    abd:{len:0.19,r0:0.46,r1:0.18,bulge:0.05}, ant:{style:'clavate',len:0.75}, legs:{len:[1.1,1.15,1.25]},
+    fore:{type:'elytron',S:1.8,C:0.5,color:0x6a2c16,pattern:'punct'}, hind:{type:'membrane',S:2.3,C:0.9,color:0xd9cfc0,alpha:0.35} },
+  Hemiptera:{ body:0x5e6b2e, accent:0x2e3516, head:{r:0.25,eye:0.85,eyeColor:0x7a2a1a}, thorax:[[0.4,0.42],[0.34,0.44],[0.24,0.42]],
+    abd:{len:0.18,r0:0.48,r1:0.2,bulge:0.08}, ant:{style:'filiform',len:0.9}, mouth:'piercing', legs:{len:[1.15,1.2,1.3]},
+    fore:{type:'hemelytron',S:1.9,C:0.9,color:0x6b5a2e,alpha:0.95}, hind:{type:'membrane',S:1.7,C:0.9} },
+  Orthoptera:{ body:0x6f8a3a, accent:0x3c4c1e, head:{r:0.38,eye:0.8}, thorax:[[0.55,0.42],[0.3,0.4],[0.3,0.4]],
+    abd:{len:0.24,r0:0.4,r1:0.16,bulge:0.05}, ant:{style:'filiform',len:0.9}, legs:{len:[1.1,1.2,2.4],hind:'jump',thick:1.15},
+    fore:{type:'tegmen',S:2.4,C:0.55,color:0x7d9145,alpha:0.9,pattern:'mottle'}, hind:{type:'fan',S:2.2,C:1.0,color:0xd9e2c8,alpha:0.4}, term:['cerci','ovipositor'] },
+  Odonata:{ body:0x2e7d8a, accent:0x1a3d44, metal:0.4, sheen:0.7, head:{r:0.38,eye:2.1,eyeColor:0x2f5e3a}, thorax:[[0.14,0.26],[0.42,0.4],[0.38,0.38]],
+    abd:{len:0.42,r0:0.15,r1:0.1,bulge:0}, ant:{style:'setaceous',len:0.28}, legs:{len:[0.9,0.95,1.0]},
+    fore:{type:'narrow',S:3.0,C:0.62,color:0xe8eef0,alpha:0.16,pattern:'odonata'}, hind:{type:'narrow',S:2.9,C:0.72,color:0xe8eef0,alpha:0.16,pattern:'odonata'}, term:['cerci'], fold:'back' },
+  Blattodea:{ body:0x6b3a1f, accent:0x3a1c0c, sheen:0.6, flat:[0.62,1], head:{r:0.3,eye:0.8}, thorax:[[0.5,0.48],[0.3,0.48],[0.3,0.48]],
+    abd:{len:0.19,r0:0.5,r1:0.22,bulge:0.05}, ant:{style:'long',len:2.4}, legs:{len:[1.2,1.4,1.7]},
+    fore:{type:'tegmen',S:2.3,C:0.8,color:0x7a4520,alpha:0.92}, hind:{type:'fan',S:2.1,C:1.0}, term:['cerci'] },
+  Ephemeroptera:{ body:0xb59a6a, accent:0x6a5434, head:{r:0.28,eye:1.4}, thorax:[[0.16,0.26],[0.55,0.36],[0.2,0.32]],
+    abd:{len:0.3,r0:0.26,r1:0.12,bulge:0}, ant:{style:'setaceous',len:0.3}, mouth:'vestigial', legs:{len:[1.5,1.0,1.1]},
+    fore:{type:'tri',S:2.2,C:1.1,color:0xeef0ea,alpha:0.22,pattern:'veins'}, hind:{type:'round',S:0.8,C:0.5,color:0xeef0ea,alpha:0.22,pattern:'veins'}, term:['cerci3'], fold:'up' },
+  Thysanoptera:{ body:0x2a2420, accent:0x151210, head:{r:0.2,eye:0.9}, thorax:[[0.24,0.22],[0.3,0.25],[0.26,0.25]],
+    abd:{len:0.26,r0:0.24,r1:0.08,bulge:0.05}, ant:{style:'moniliform',len:0.7}, mouth:'piercing', legs:{len:[0.75,0.75,0.8],thick:1.3},
+    fore:{type:'fringed',S:1.7,C:0.2,color:0xc8c0b0,alpha:0.6}, hind:{type:'fringed',S:1.6,C:0.2,color:0xc8c0b0,alpha:0.6}, fold:'back' },
+  Neuroptera:{ body:0x8fc06a, accent:0x4e7a34, head:{r:0.28,eye:1.2,eyeColor:0xc9a227}, thorax:[[0.2,0.26],[0.4,0.32],[0.36,0.3]],
+    abd:{len:0.3,r0:0.26,r1:0.12,bulge:0.05}, ant:{style:'filiform',len:1.7}, legs:{len:[1.0,1.0,1.1]},
+    fore:{type:'membrane',S:2.6,C:1.0,color:0xeaf5e0,alpha:0.16,vein:0x5f9a45,pattern:'dense'}, hind:{type:'membrane',S:2.4,C:0.95,color:0xeaf5e0,alpha:0.16,vein:0x5f9a45,pattern:'dense'}, fold:'roof' },
+  Trichoptera:{ body:0x6a5236, accent:0x3a2c1c, hairy:true, head:{r:0.26,eye:1.1}, thorax:[[0.18,0.26],[0.42,0.34],[0.34,0.32]],
+    abd:{len:0.26,r0:0.28,r1:0.12,bulge:0.05}, ant:{style:'long',len:2.4}, mouth:'vestigial', legs:{len:[1.3,1.5,1.6]},
+    fore:{type:'membrane',S:2.3,C:0.75,color:0x9a7e56,alpha:0.85,pattern:'hairy'}, hind:{type:'fan',S:2.0,C:0.9,color:0xbfae8e,alpha:0.5}, fold:'roof' },
+  Phasmatodea:{ body:0x7a6a3c, accent:0x4a3e20, head:{r:0.2,eye:0.7}, thorax:[[0.5,0.15],[1.4,0.15],[0.9,0.15]],
+    abd:{len:0.44,r0:0.15,r1:0.09,bulge:0}, ant:{style:'long',len:1.8}, legs:{len:[2.3,2.0,2.3],thick:0.55}, wingless:true, term:['cerci'],
+    note:'Shown wingless, as many stick insects are. Wing loss here is not modelled as a Hox trait, so Hox edits cannot restore wings.' },
+  Siphonaptera:{ body:0x5a3218, accent:0x2e180a, sheen:0.8, flat:[1,0.5], head:{r:0.22,eye:0.4}, thorax:[[0.2,0.3],[0.2,0.32],[0.24,0.34]],
+    abd:{len:0.2,r0:0.4,r1:0.22,bulge:0.15}, ant:{style:'setaceous',len:0.25}, mouth:'piercing', legs:{len:[0.9,1.0,1.7],hind:'jump',thick:1.2}, wingless:true,
+    note:'Fleas are secondarily wingless; Hox edits cannot restore wings in this model.' },
+  Zygentoma:{ body:0x9aa3a8, accent:0x5a6268, sheen:0.9, metal:0.5, flat:[0.55,1], head:{r:0.26,eye:0.35}, thorax:[[0.32,0.36],[0.3,0.38],[0.3,0.38]],
+    abd:{len:0.26,r0:0.38,r1:0.1,bulge:0}, ant:{style:'long',len:1.9}, legs:{len:[0.8,0.85,0.95]}, wingless:true, term:['cerci3'],
+    note:'Silverfish are primitively wingless: insect wings evolved after this lineage split off.' },
+};
+
+const FAM = {};
+const fam = (names, o) => names.split(',').forEach(n => FAM[n.trim()] = o);
+fam('Drosophilidae', { body:0xb08a50, head:{eyeColor:0xc0281e} });
+fam('Culicidae', { body:0x4a4a42, accent:0x2a2a26, head:{r:0.22,eye:1.4,eyeColor:0x222222}, thorax:[[0.14,0.2],[0.42,0.28],[0.14,0.22]],
+  abd:{len:0.3,r0:0.2,r1:0.09,bulge:0}, ant:{style:'pilose',len:0.9}, mouth:'proboscisFwd', legs:{len:[2.2,2.4,2.8],thick:0.55},
+  fore:{type:'narrow',S:2.2,C:0.55,color:0xd8d8d0,alpha:0.25,pattern:'veins'} });
+fam('Psychodidae', { hairy:true, ant:{style:'moniliform',len:0.9}, mouth:'piercing', fore:{type:'membrane',S:1.7,C:0.8,color:0xb8b0a0,alpha:0.85,pattern:'hairy'}, fold:'roof' });
+fam('Chironomidae,Ceratopogonidae', { body:0x5a6a3a, head:{r:0.22,eye:1.0,eyeColor:0x1a1a1a}, ant:{style:'pilose',len:0.8}, mouth:'piercing', abd:{len:0.3,r0:0.18,r1:0.08,bulge:0}, legs:{len:[1.6,1.6,1.8],thick:0.6} });
+fam('Cecidomyiidae,Sciaridae', { body:0x4a3a30, head:{r:0.22,eye:1.0,eyeColor:0x1a1a1a}, ant:{style:'moniliform',len:0.9}, mouth:'piercing', abd:{len:0.28,r0:0.22,r1:0.09}, legs:{len:[1.5,1.6,1.8],thick:0.6} });
+fam('Tephritidae', { body:0x8a5a2a, head:{eyeColor:0x2b7a62}, fore:{pattern:'bands',color:0xe6edf2,alpha:0.2} });
+fam('Calliphoridae', { body:0x2f6b4f, metal:0.6, sheen:0.8, head:{eyeColor:0x8a1e1e} });
+fam('Muscidae', { body:0x3a3e44, head:{eyeColor:0x8a1e1e} });
+fam('Glossinidae', { body:0x7a6040, mouth:'proboscisFwd', fold:'back' });
+fam('Syrphidae', { body:0x2a2418, abd:{bands:[0x231e14,0xe0b420],r0:0.36}, head:{eyeColor:0x6a2a1a} });
+fam('Stratiomyidae', { body:0x1c1c1e, fore:{color:0x5a5a60,alpha:0.5}, ant:{style:'elbowed',len:0.6} });
+fam('Dolichopodidae', { body:0x2f7a4a, metal:0.7, sheen:0.8, legs:{len:[1.5,1.6,1.8],thick:0.7} });
+fam('Diopsidae', { body:0x5a3a22, head:{stalk:0.9,eyeColor:0x8a2a1e}, note:'Stalk-eyed fly: eye stalks are not Hox traits and stay unchanged.' });
+fam('Apidae,Andrenidae,Colletidae,Halictidae,Megachilidae', { body:0x3a2a14, hairy:true, abd:{bands:[0x2e2210,0xc89a2a],waist:true,r0:0.4,bulge:0.3}, mouth:'lapping', ant:{style:'elbowed',len:0.9} });
+fam('Formicidae', { body:0x5a2a14, accent:0x2a140a, sheen:0.6, head:{r:0.38,eye:0.6}, thorax:[[0.2,0.22],[0.4,0.26],[0.3,0.24]], abd:{len:0.26,r0:0.42,r1:0.1,bulge:0.4,waist:true}, legs:{len:[1.5,1.6,1.8],thick:0.75}, wingless:true,
+  note:'Worker ant shown. Workers lack wings through caste development, not through loss of Hox genes; queens and males are winged.' });
+fam('Vespidae', { body:0x1c1c1c, abd:{bands:[0x1c1c1c,0xf2c318],r0:0.38}, fore:{color:0x8a6a3a,alpha:0.45}, hind:{color:0x8a6a3a,alpha:0.45} });
+fam('Braconidae,Ichneumonidae,Pteromalidae,Eulophidae,Encyrtidae,Trichogrammatidae,Agaonidae,Cynipidae,Figitidae,Bethylidae', { body:0x1e1a16, abd:{r0:0.3}, ant:{style:'filiform',len:1.2}, term:['ovipositor'], head:{eyeColor:0x7a1a1a} });
+fam('Athaliidae,Cephidae,Diprionidae,Orussidae', { body:0x2a2218, abd:{waist:false,r0:0.32,r1:0.14,bulge:0.1}, ant:{style:'filiform',len:0.9}, term:['ovipositor'] });
+fam('Nymphalidae', { ant:{style:'clubbed',len:1.3}, fore:{pattern:'nymph',alpha:1}, hind:{pattern:'nymph',alpha:1}, fold:'up', legs:{len:[0.5,1.3,1.4]} });
+fam('Papilionidae', { ant:{style:'clubbed',len:1.3}, fore:{pattern:'swallow'}, hind:{type:'swallowtail',pattern:'swallow'}, fold:'up' });
+fam('Pieridae', { ant:{style:'clubbed',len:1.3}, body:0x3a3a3a, fore:{pattern:'pierid'}, hind:{pattern:'pierid'}, fold:'up' });
+fam('Lycaenidae', { ant:{style:'clubbed',len:1.0}, fore:{pattern:'blue',S:2.0,C:1.1}, hind:{pattern:'blue',S:1.7,C:1.1}, fold:'up' });
+fam('Hesperiidae', { ant:{style:'clubbed',len:0.9}, body:0x6a4a2a, fore:{pattern:'skipper',S:2.0}, hind:{pattern:'skipper',S:1.6} });
+fam('Bombycidae', { body:0xece4d4, accent:0xb8ae9a, fore:{color:0xf2ece0,pattern:'white'}, hind:{color:0xf2ece0,pattern:'white'} });
+fam('Sphingidae', { body:0x6a6458, fore:{type:'narrowtri',S:2.8,C:0.95,pattern:'hawk'}, hind:{S:1.6,C:0.9,pattern:'hawk'}, ant:{style:'filiform',len:1.0}, abd:{r0:0.36,len:0.3} });
+fam('Noctuidae,Erebidae,Crambidae,Pyralidae,Tortricidae,Plutellidae,Gelechiidae,Cosmopterigidae', { ant:{style:'filiform',len:1.1} });
+fam('Tenebrionidae', { body:0x6b2a12, fore:{color:0x7a3216} });
+fam('Coccinellidae', { body:0x1a1a1a, head:{r:0.2}, thorax:[[0.24,0.36],[0.2,0.44],[0.2,0.46]], abd:{len:0.24,r0:0.52,r1:0.3,bulge:0.05}, ant:{style:'clavate',len:0.5}, legs:{len:[0.85,0.9,0.95]}, fore:{color:0xc8201a,pattern:'spots',S:1.3,C:0.62} });
+fam('Curculionidae,Brentidae', { body:0x3a2a1a, head:{snout:0.55}, ant:{style:'elbowed',len:0.7} });
+fam('Scarabaeidae', { body:0x2c3a1e, metal:0.5, ant:{style:'lamellate',len:0.6}, abd:{r0:0.52} });
+fam('Cerambycidae', { body:0x24221e, ant:{style:'long',len:2.8}, fore:{color:0x2a2620,pattern:'punct'} });
+fam('Chrysomelidae', { body:0x2a2a20, fore:{color:0xe8c040,pattern:'stripes',C:0.58}, abd:{r0:0.5} });
+fam('Lampyridae', { body:0x3a3020, sheen:0.2, fore:{color:0x4a4030,pattern:'margin'}, abd:{bands:[0x4a4030,0xe8e070]} });
+fam('Buprestidae', { body:0x2a6a4a, metal:0.8, fore:{color:0x2a7a5a,pattern:'punct'} });
+fam('Staphylinidae', { abd:{len:0.32,r0:0.34,r1:0.14}, fore:{S:0.7}, note:'Rove beetles have short elytra; the hindwings fold underneath.' });
+fam('Silphidae', { body:0x1e1e1e, fore:{color:0x262422,pattern:'margin'} });
+fam('Nitidulidae', { body:0x3a2a1e, fore:{S:1.3} });
+fam('Aphididae,Adelgidae,Phylloxeridae', { body:0x7aa04a, accent:0x40602a, head:{r:0.2,eye:0.8,eyeColor:0x8a1a1a}, thorax:[[0.18,0.26],[0.3,0.32],[0.2,0.32]], abd:{len:0.22,r0:0.5,r1:0.18,bulge:0.2}, ant:{style:'filiform',len:1.3}, legs:{len:[1.2,1.3,1.5],thick:0.7},
+  fore:{type:'membrane',S:2.3,C:0.8,color:0xeef2e6,alpha:0.18,pattern:'veins'}, hind:{type:'small',S:1.5,C:0.5,color:0xeef2e6,alpha:0.18}, term:['cornicles'], note:'Winged (alate) form shown; many aphid generations are wingless, a switch controlled by environment, not Hox genes.' });
+fam('Aleyrodidae', { body:0xe8d870, head:{r:0.18,eye:0.9,eyeColor:0x8a1a1a}, fore:{type:'membrane',color:0xfafafa,alpha:0.92,pattern:'white',S:1.6,C:0.8}, hind:{type:'membrane',color:0xfafafa,alpha:0.92,pattern:'white',S:1.5,C:0.8}, fold:'roof' });
+fam('Cicadellidae,Delphacidae', { body:0x7aa03a, head:{r:0.3,eye:1.0}, abd:{r0:0.3,r1:0.1}, fore:{type:'tegmen',S:2.0,C:0.6,color:0x8ab04a,alpha:0.85}, legs:{hind:'jump',len:[1.0,1.0,1.6]}, fold:'roof' });
+fam('Fulgoridae', { body:0x3a3430, head:{r:0.26}, fore:{type:'tegmen',S:2.4,C:0.9,color:0xc8b8a0,alpha:1,pattern:'spots2'}, hind:{type:'fan',S:2.1,C:1.0,color:0xc83a30,alpha:1,pattern:'lantern'} });
+fam('Cimicidae', { body:0x8a3a1e, flat:[0.5,1], abd:{r0:0.56,r1:0.3,bulge:0.1}, wingless:true, note:'Bed bugs have only tiny forewing pads and no hindwings; wing loss is not under Hox control in this model.' });
+fam('Pentatomidae', { body:0x6a6a3a, flat:[0.7,1], thorax:[[0.36,0.5],[0.34,0.54],[0.24,0.52]], abd:{r0:0.56,r1:0.24} });
+fam('Reduviidae', { body:0x2a2220, head:{r:0.22,snout:0.3}, thorax:[[0.5,0.34],[0.3,0.38],[0.24,0.36]], abd:{len:0.28,r0:0.46,r1:0.18}, legs:{len:[1.6,1.7,2.0],thick:0.8}, ant:{style:'filiform',len:1.5} });
+fam('Pseudococcidae', { body:0xeee8dc, hairy:true, wingless:true, abd:{r0:0.5,r1:0.24,bulge:0.1}, note:'Adult female mealybug shown: wingless and wax-covered. Males are winged.' });
+fam('Kalotermitidae,Termopsidae', { body:0xe6d6b4, accent:0x8a6a40, sheen:0.2, flat:[0.8,1], head:{r:0.34,eye:0.2,eyeColor:0x8a6a40}, thorax:[[0.24,0.3],[0.22,0.3],[0.22,0.3]], abd:{len:0.26,r0:0.42,r1:0.2,bulge:0.15}, ant:{style:'moniliform',len:0.8}, legs:{len:[0.9,1.0,1.1]}, wingless:true,
+  note:'Wingless immature form shown. These drywood and dampwood termites have no true worker caste; winged reproductives also exist.' });
+fam('Acrididae', { ant:{style:'filiform',len:0.8}, term:['cerci'] });
+fam('Tettigoniidae', { body:0x5a9a3a, ant:{style:'long',len:3.0} });
+fam('Coenagrionidae', { abd:{len:0.46,r0:0.11,r1:0.08}, head:{r:0.3,eye:1.6}, fore:{S:2.2,C:0.4}, hind:{S:2.1,C:0.4}, fold:'back' });
+
+function merge(a, b){ if(!b) return a; const o = Array.isArray(a) ? a.slice() : {...a};
+  for(const k in b){ const v=b[k]; o[k] = (v && typeof v==='object' && !Array.isArray(v) && a && typeof a[k]==='object' && !Array.isArray(a[k])) ? merge(a[k], v) : v; } return o; }
+const templateFor = sp => merge(merge(BASE, ORDERS[sp.order]), FAM[sp.family]);
+
+function ventralKind(id, tpl){
+  const m = tpl.mouth;
+  switch(id){
+    case 'AN': case 'GROUND': return 'antenna';
+    case 'MN': return (m==='chewing'||m==='lapping') ? 'mandible' : 'nub';
+    case 'MX': return m==='siphoning' ? 'proboscis' : (m==='chewing'||m==='lapping') ? 'maxilla' : m==='vestigial' ? 'maxpalp' : 'maxpalp';
+    case 'LB': return ({sponging:'labellum',piercing:'rostrum',proboscisFwd:'proboscisFwd',siphoning:'labialpalp',lapping:'glossa',vestigial:'nub'})[m] || 'labium';
+    case 'T1': return 'leg-fore'; case 'T2': return 'leg-mid'; case 'T3': return 'leg-hind';
+  }
+  return null;
+}
+function dorsalKind(id, i, tpl){ if(i<=4 || tpl.wingless) return null; if(id==='T2'||id==='GROUND') return 'fore'; if(id==='T3') return 'hind'; return null; }
+
+const PART_NAME = {antenna:'antenna',mandible:'mandible',maxilla:'maxilla and palp',labium:'labium and palps',proboscis:'coiled proboscis',labialpalp:'labial palps',rostrum:'beak (rostrum)',proboscisFwd:'piercing proboscis',labellum:'sponging labellum',maxpalp:'maxillary palp',glossa:'tongue (glossa)',nub:'vestigial lobe','leg-fore':'foreleg','leg-mid':'midleg','leg-hind':'hindleg'};
+function wingName(isFore, tpl){ const type = (isFore ? tpl.fore : tpl.hind).type;
+  const n = {elytron:'elytron (wing case)', tegmen:'tegmen (leathery forewing)', hemelytron:'hemelytron (half-hardened forewing)', haltere:'haltere', fan:'fan-folded hindwing', fringed:'fringed wing'}[type];
+  if(n) return n; if(isFore && tpl.hind.type==='haltere') return 'wing'; return isFore ? 'forewing' : 'hindwing'; }
+function partsOf(id, i, tpl){ const v = ventralKind(id, tpl); const d = dorsalKind(id, i, tpl);
+  let vn = v ? PART_NAME[v] : null; if(v==='leg-hind' && tpl.legs.hind==='jump') vn = 'jumping hindleg';
+  return {v:vn, d: d ? wingName(d==='fore', tpl) : null}; }
+
+/* plain-language explanations */
+const ID_EXPLAIN = {
+  AN:'Antennal identity: the segment grows an antenna.',
+  GROUND:'Hox-free ground state: with no Hox instruction the limb becomes antenna-like and, on the thorax or abdomen, a wing can form (the wing part is extrapolated).',
+  IC:'Intercalary identity: a small head segment with no appendage.',
+  MN:'Mandibular identity: jaws (mandibles), or a tiny lobe in insects without jaws.',
+  MX:'Maxillary identity: maxillae with feeler palps; in butterflies and moths these form the coiled proboscis.',
+  LB:'Labial identity: the lower lip and its palps; in flies the sponging pad, in true bugs the beak.',
+  T1:'First thoracic identity: forelegs, and Scr keeps wings from forming.',
+  T2:'Second thoracic identity: midlegs and the main pair of wings.',
+  T3:'Third thoracic identity: hindlegs and hindwings, which are halteres in flies.',
+  A1:'First abdominal identity: Ubx switches legs off.',
+  AB:'Abdominal identity: abd-A switches legs off.',
+  PA:'Tail-end identity: Abd-B builds genitalia, cerci and other terminal parts.',
+  DELETED:'No Hox instruction in a mouthpart segment: the mouthpart fails to form.'
+};
+const GENE_INFO = {
+  lab:{role:'Marks the intercalary head segment, which carries no appendage, and helps build parts of the head and brain.', loss:'Head-skeleton and intercalary defects; nothing visible changes in the appendages.', gain:'Ranked lowest, so it only matters where no other Hox gene is on; it removes appendages there.'},
+  pb:{role:'Works with <i>Dfd</i> in the maxillary segment and with <i>Scr</i> in the labial segment to build mouthpart palps.', loss:'Labial palps turn into legs (seen in <i>Drosophila</i>, <i>Tribolium</i> and the milkweed bug).', gain:'Antennae or legs turn into maxillary palps.'},
+  Dfd:{role:'Specifies the mandibular and maxillary segments, the jaws.', loss:'Mandibles and parts of the maxillae fail to form.', gain:'Makes mandible-like structures where no higher-ranked Hox gene is active.'},
+  Scr:{role:'Specifies the labial segment and the first thoracic segment, blocks wings on T1, and makes sex combs on male fly forelegs.', loss:'T1 takes T2 identity, including wing-like outgrowths on the prothorax of the milkweed bug; the labium changes toward a maxilla.', gain:'Midlegs and hindlegs become foreleg-like, and wings on those segments are suppressed.'},
+  Antp:{role:'Specifies the second thoracic segment and keeps its legs from becoming antennae.', loss:'Midlegs turn into antenna-like limbs; the wing is unaffected.', gain:'Antennae turn into legs, the classic <i>Antennapedia</i> fly.'},
+  Ubx:{role:'Specifies the third thoracic and first abdominal segments: it makes hindwings different from forewings (halteres in flies) and blocks legs on A1.', loss:'T3 copies T2: a four-winged fly, or beetle hindwings that become elytra.', gain:'Forewings become hindwings or halteres; antennae can become legs.'},
+  abdA:{role:'Specifies the middle abdomen and switches off leg development there (through <i>Distal-less</i>).', loss:'Abdominal segments take A1 identity; in beetles small abdominal appendages appear.', gain:'Thoracic segments lose their legs and wings.'},
+  AbdB:{role:'Specifies the tail end: genitalia, cerci and terminal segments.', loss:'Tail segments take a more anterior abdominal identity and the genitalia are missing.', gain:'Segments ahead of the tail take tail-end identity and lose their appendages.'}
+};
+function applyEdits(e, edits){
+  for(const ed of edits || []){ const g = normGene(ed.gene); if(!e[g]) throw new Error('Unknown gene: ' + ed.gene);
+    if(ed.op === 'ko'){ e[g].fill(0); continue; }
+    for(const sg of ed.segs || []){ const i = SEG.indexOf(sg); if(i < 0) throw new Error('Unknown segment: ' + sg); e[g][i] = ed.op === 'on' ? 1 : 0; } }
+  return e;
+}
+function describeChange(i, from, to, tpl){ const a = partsOf(from, i, tpl), b = partsOf(to, i, tpl); const bits = [];
+  if(a.v !== b.v) bits.push(`${a.v || 'no appendage'} → ${b.v || 'no appendage'}`); if(a.d !== b.d) bits.push(`${a.d || 'no wing'} → ${b.d || 'no wing'}`);
+  return bits.length ? bits.join('; ') : 'identity shift with no visible appendage change in this model'; }
+// a record matches when at least one of its genes was changed in this segment and every other gene is already in the record's state by default
+function matchEvidence(i, from, to, expr, order, records){
+  const gained = [], lost = []; GENES.forEach(g => { const c = expr[g][i], d = DEF[g][i]; if(c && !d) gained.push(g); if(!c && d) lost.push(g); });
+  const geneOk = r => { const gs = String(r.gene).split('+').map(x => normGene(x.trim())); const loss = r.manipulation==='loss'; const pool = loss ? lost : gained;
+    return gs.some(g => pool.includes(g)) && gs.every(g => pool.includes(g) || (DEF[g] && (loss ? !DEF[g][i] : !!DEF[g][i]))); };
+  const pref = (a,b) => ((b.order===order) - (a.order===order)) || ((!!b.verified) - (!!a.verified));
+  const recs = (records || []).filter(r => r.from===from && r.to===to && geneOk(r)).sort(pref);
+  // same manipulation of the same segment identity, but the published outcome differs from the model's
+  // only when this segment's changes are exactly the record's manipulation (extra genes make it a different experiment)
+  const exact = r => { const gs = String(r.gene).split('+').map(x => normGene(x.trim())); return [...gained, ...lost].every(g => gs.includes(g)); };
+  const conflicts = recs.length ? [] : (records || []).filter(r => r.from===from && r.to!==to && geneOk(r) && exact(r)).sort(pref);
+  return {rec: recs[0], conflict: conflicts[0], gained, lost};
+}
+function diffAll(expr, tpl, order, records){
+  const out = []; for(let i=0;i<18;i++){ const from = identityOf(i, DEF), to = identityOf(i, expr); if(from===to) continue;
+    out.push({i, seg:SEG[i], from, to, desc:describeChange(i, from, to, tpl), ...matchEvidence(i, from, to, expr, order, records)}); }
+  return out;
+}
+/* ENGINE:END */
+
+/* ---------- state ---------- */
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const state = { sp:null, tpl:null, expr:defaultExpr(), labels:true, stain:false, spread:true, anim:!reduced };
+let T = null, three = null; // THREE namespace, scene bundle
+
+/* ---------- 3D ---------- */
+async function loadThree(){
+  try{
+    T = await import('three');
+    const {OrbitControls} = await import('three/addons/controls/OrbitControls.js');
+    const {CSS2DRenderer, CSS2DObject} = await import('three/addons/renderers/CSS2DRenderer.js');
+    return {OrbitControls, CSS2DRenderer, CSS2DObject};
+  }catch(err){ console.error('3D libraries failed to load', err); return null; }
+}
+
+function initScene(lib){
+  const host = $('#stage');
+  let renderer;
+  try{ renderer = new T.WebGLRenderer({antialias:true, alpha:true}); }
+  catch(err){ showNoGL('This browser could not start WebGL, so the 3D model is unavailable. The Hox map, records and change log still work.'); return null; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+  host.prepend(renderer.domElement);
+  const labelR = new lib.CSS2DRenderer(); labelR.domElement.className = 'labels'; host.appendChild(labelR.domElement);
+  const scene = new T.Scene();
+  const camera = new T.PerspectiveCamera(32, 1, 0.05, 200);
+  camera.position.set(4.2, 3.0, 7.6);
+  const controls = new lib.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.08; controls.minDistance = 1.5; controls.maxDistance = 40;
+  scene.add(new T.HemisphereLight(0xf2f6ff, 0x3a3326, 1.5));
+  const key = new T.DirectionalLight(0xffffff, 2.6); key.position.set(4, 8, 6); scene.add(key);
+  const rim = new T.DirectionalLight(0xc4dcff, 1.3); rim.position.set(-6, 3, -5); scene.add(rim);
+  const shadow = new T.Mesh(new T.PlaneGeometry(1,1), new T.MeshBasicMaterial({map:canvasTex(128,128,(g,w,h)=>{const r=g.createRadialGradient(w/2,h/2,2,w/2,h/2,w/2);r.addColorStop(0,'rgba(0,0,0,.34)');r.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=r;g.fillRect(0,0,w,h);}), transparent:true, depthWrite:false}));
+  shadow.rotation.x = -Math.PI/2; scene.add(shadow);
+  const b = {renderer, labelR, scene, camera, controls, shadow, insect:null, flaps:[], grows:[], segMeshes:[], lib, keys:new Set(), clock:new T.Clock()};
+  const resize = () => { const w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); renderer.domElement.style.width='100%'; renderer.domElement.style.height='100%'; labelR.setSize(w, h); camera.aspect = w/Math.max(h,1); camera.updateProjectionMatrix(); };
+  new ResizeObserver(resize).observe(host); resize();
+  renderer.setAnimationLoop(() => tick(b));
+  setupHover(b);
+  return b;
+}
+function showNoGL(msg){ const d=document.createElement('div'); d.className='nogl'; d.textContent=msg; $('#stage').appendChild(d); }
+
+function tick(b){
+  const t = b.clock.getElapsedTime();
+  for(const f of b.flaps){ f.obj.rotation.x = (state.anim && state.spread) ? f.amp*Math.sin(t*f.freq + f.phase) : 0; }
+  for(const g of b.grows){ if(g.k < 1){ g.k = Math.min(1, g.k + 0.045); const e = 1 + 2.2*Math.pow(g.k-1,3) + 1.2*Math.pow(g.k-1,2); g.obj.scale.set(e, e, e*g.side); } }
+  b.controls.update();
+  b.renderer.render(b.scene, b.camera); b.labelR.render(b.scene, b.camera);
+}
+
+/* geometry helpers */
+let SPH = null;
+const V = (x,y,z) => new T.Vector3(x,y,z);
+function limb(a, b, r1, r2, mat){ const d = new T.Vector3().subVectors(b,a); const L = d.length(); const m = new T.Mesh(new T.CylinderGeometry(r2, r1, L, 10, 1), mat); m.position.copy(a).addScaledVector(d, 0.5); m.quaternion.setFromUnitVectors(V(0,1,0), d.normalize()); return m; }
+function ball(p, r, mat, sx=1, sy=1, sz=1){ const m = new T.Mesh(SPH, mat); m.position.copy(p); m.scale.set(r*sx, r*sy, r*sz); return m; }
+function chain(pts, radii, mat, joints=true){ const g = new T.Group(); for(let i=0;i<pts.length-1;i++){ g.add(limb(pts[i], pts[i+1], radii[i], radii[i+1], mat)); if(joints && i>0) g.add(ball(pts[i], radii[i]*1.08, mat)); } return g; }
+function tube(pts, r, mat, seg=40){ return new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts), seg, r, 7, false), mat); }
+function orient(obj, f, u, o){ const O=o.clone().normalize(); const F=f.clone().sub(O.clone().multiplyScalar(f.dot(O))).normalize(); const U=new T.Vector3().crossVectors(O,F); obj.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(F,U,O)); }
+function canvasTex(w, h, draw){ const c = document.createElement('canvas'); c.width=w; c.height=h; const g = c.getContext('2d'); draw(g, w, h); const t = new T.CanvasTexture(c); t.colorSpace = T.SRGBColorSpace; t.anisotropy = 4; return t; }
+const hex = n => '#' + n.toString(16).padStart(6,'0');
+function rng(seed){ let s = (seed>>>0) || 1; return () => { s ^= s<<13; s>>>=0; s ^= s>>17; s ^= s<<5; s>>>=0; return s/4294967296; }; }
+
+/* textures */
+function ommatidia(color){ return canvasTex(128, 128, (g,w,h)=>{ g.fillStyle=hex(color); g.fillRect(0,0,w,h); g.fillStyle='rgba(255,255,255,.16)'; for(let y=0;y<h;y+=6) for(let x=(y/6)%2?3:0;x<w;x+=6){ g.beginPath(); g.arc(x,y,1.7,0,7); g.fill(); } }); }
+
+function wingTexture(spec, seed){
+  const R = rng(seed*7+3);
+  return canvasTex(512, 256, (g,w,h)=>{
+    const c = new T.Color(spec.color ?? 0xdde6ec); const a = spec.alpha ?? 0.3;
+    const rgba = (col, al) => `rgba(${Math.round(col.r*255)},${Math.round(col.g*255)},${Math.round(col.b*255)},${al})`;
+    g.fillStyle = rgba(c, a); g.fillRect(0,0,w,h);
+    const vein = new T.Color(spec.vein ?? 0x2f3438); const p = spec.pattern || 'veins';
+    const veins = (n, al, lw) => { g.strokeStyle = rgba(vein, al); g.lineWidth = lw; for(let k=0;k<n;k++){ const y0 = h*(0.25+0.5*k/(n-1||1)); const y1 = h*(0.02+0.96*k/(n-1||1)); g.beginPath(); g.moveTo(0, y0); g.quadraticCurveTo(w*0.45, (y0+y1)/2 + (k-n/2)*4, w, y1); g.stroke(); } };
+    const lep = (base, dark) => { g.fillStyle = base; g.fillRect(0,0,w,h); g.strokeStyle = dark; g.lineWidth = 3; for(let k=0;k<7;k++){ const y1=h*(0.04+0.92*k/6); g.beginPath(); g.moveTo(0,h*0.5); g.quadraticCurveTo(w*0.5,(h*0.5+y1)/2,w,y1); g.stroke(); } };
+    if(p==='veins'||p==='odonata'||p==='dense'||p==='bands'){
+      veins(p==='dense'?11:7, 0.85, p==='dense'?1.6:2.2);
+      if(p==='odonata'||p==='dense'){ g.strokeStyle=rgba(vein,0.45); g.lineWidth=1; for(let x=20;x<w;x+= p==='odonata'?10:16){ g.beginPath(); g.moveTo(x,0); g.lineTo(x+4,h); g.stroke(); } }
+      if(p==='odonata'){ g.fillStyle='rgba(30,26,22,.9)'; g.fillRect(w*0.84, h*0.02, w*0.06, h*0.12); }
+      if(p==='bands'){ g.fillStyle='rgba(90,50,20,.75)'; for(const x of [0.25,0.5,0.75]){ g.save(); g.translate(w*x,h/2); g.rotate(-0.35); g.fillRect(-14,-h,28,h*2); g.restore(); } }
+    } else if(p==='hairy'){ veins(7,0.7,2); g.strokeStyle='rgba(60,40,20,.35)'; g.lineWidth=1; for(let i=0;i<900;i++){ const x=R()*w,y=R()*h; g.beginPath(); g.moveTo(x,y); g.lineTo(x+5,y+2); g.stroke(); } }
+    else if(p==='mottle'){ veins(9,0.5,1.5); for(let i=0;i<140;i++){ g.fillStyle=`rgba(60,50,20,${0.15+R()*0.25})`; g.beginPath(); g.arc(R()*w,R()*h,2+R()*8,0,7); g.fill(); } }
+    else if(p==='white'){ g.fillStyle=rgba(c,a); g.fillRect(0,0,w,h); veins(7,0.18,1.5); }
+    else if(p==='moth'){ const base=new T.Color(spec.color); lep(rgba(base,1), 'rgba(40,30,20,.35)'); for(let i=0;i<6;i++){ g.strokeStyle='rgba(50,35,22,.55)'; g.lineWidth=3; g.beginPath(); const x=w*(0.2+i*0.13); g.moveTo(x,0); g.bezierCurveTo(x+20,h*0.3,x-20,h*0.6,x+10,h); g.stroke(); } g.fillStyle='rgba(30,22,16,.6)'; g.beginPath(); g.arc(w*0.55,h*0.45,9,0,7); g.fill(); }
+    else if(p==='hawk'){ lep('#7a746a','rgba(40,36,30,.5)'); g.strokeStyle='rgba(30,28,24,.6)'; g.lineWidth=5; for(let i=0;i<4;i++){ g.beginPath(); g.moveTo(0,h*(0.3+i*0.12)); g.lineTo(w,h*(0.15+i*0.18)); g.stroke(); } }
+    else if(p==='nymph'){ const kind = Math.floor(R()*3);
+      if(kind===0){ lep('#e2731e','rgba(20,14,10,.95)'); g.fillStyle='#120c08'; g.fillRect(w*0.86,0,w*0.14,h); for(let i=0;i<9;i++){ g.fillStyle='#fff'; g.beginPath(); g.arc(w*0.93, h*(0.06+i*0.11), 4, 0, 7); g.fill(); } }
+      else if(kind===1){ g.fillStyle='#16110e'; g.fillRect(0,0,w,h); g.fillStyle='#d23a26'; g.fillRect(w*0.35,h*0.1,w*0.28,h*0.8); g.fillStyle='#f1d14a'; g.fillRect(w*0.7,h*0.2,w*0.12,h*0.25); }
+      else { lep('#8a6a4a','rgba(40,30,20,.4)'); for(const [x,y,r] of [[0.72,0.35,26],[0.6,0.7,16]]){ g.fillStyle='#f2d14a'; g.beginPath(); g.arc(w*x,h*y,r,0,7); g.fill(); g.fillStyle='#120c08'; g.beginPath(); g.arc(w*x,h*y,r*0.65,0,7); g.fill(); g.fillStyle='#fff'; g.beginPath(); g.arc(w*x-3,h*y-3,r*0.2,0,7); g.fill(); } } }
+    else if(p==='swallow'){ lep('#f1d64a','rgba(20,14,10,.9)'); g.fillStyle='#16110e'; for(const x of [0.18,0.42,0.62]){ g.fillRect(w*x,0,w*0.06,h); } g.fillRect(w*0.84,0,w*0.16,h); g.fillStyle='#3a6ad0'; for(let i=0;i<5;i++){ g.beginPath(); g.arc(w*0.92,h*(0.15+i*0.17),5,0,7); g.fill(); } }
+    else if(p==='pierid'){ lep('#f6f3ea','rgba(60,60,60,.25)'); g.fillStyle='#1e1e1e'; g.beginPath(); g.moveTo(w*0.72,0); g.lineTo(w,0); g.lineTo(w,h*0.45); g.closePath(); g.fill(); g.beginPath(); g.arc(w*0.6,h*0.45,10,0,7); g.fill(); }
+    else if(p==='blue'){ lep('#5f86e0','rgba(30,40,80,.4)'); g.fillStyle='rgba(20,24,40,.9)'; g.fillRect(w*0.9,0,w*0.1,h); }
+    else if(p==='skipper'){ lep('#a8742e','rgba(50,30,10,.5)'); g.fillStyle='rgba(250,230,170,.85)'; for(let i=0;i<5;i++){ g.fillRect(w*(0.5+i*0.07),h*(0.3+R()*0.3),10,10); } }
+    else if(p==='spots2'){ g.fillStyle='#cdbda4'; g.fillRect(0,0,w,h); g.fillStyle='#1a1614'; for(let i=0;i<22;i++){ g.beginPath(); g.arc(R()*w*0.8,R()*h,4+R()*5,0,7); g.fill(); } g.strokeStyle='rgba(20,16,14,.6)'; g.lineWidth=2; for(let i=0;i<w;i+=8){ g.beginPath(); g.moveTo(w*0.82+i*0.1,0); g.lineTo(w*0.82+i*0.1,h); g.stroke(); } }
+    else if(p==='lantern'){ g.fillStyle='#c83a30'; g.fillRect(0,0,w*0.55,h); g.fillStyle='#16110e'; g.fillRect(w*0.55,0,w*0.45,h); g.fillStyle='#f2f2f2'; g.fillRect(w*0.5,0,w*0.08,h); g.fillStyle='#16110e'; for(let i=0;i<6;i++){ g.beginPath(); g.arc(R()*w*0.5,R()*h,6,0,7); g.fill(); } }
+    if(spec.type==='hemelytron'){ g.clearRect(w*0.62,0,w*0.38,h); g.fillStyle='rgba(220,226,230,.25)'; g.fillRect(w*0.62,0,w*0.38,h); veins(5,0.5,1.5); }
+    if(spec.type==='fringed'){ g.clearRect(0,0,w,h); g.fillStyle=rgba(c,0.9); g.fillRect(0,h*0.38,w,h*0.24); g.strokeStyle=rgba(c,0.7); g.lineWidth=1.4; for(let x=w*0.15;x<w;x+=5){ g.beginPath(); g.moveTo(x,h*0.38); g.lineTo(x+2,0); g.moveTo(x,h*0.62); g.lineTo(x+2,h); g.stroke(); } }
+  });
+}
+
+function elytronTexture(spec, seed){
+  const R = rng(seed*11+5);
+  return canvasTex(256, 256, (g,w,h)=>{
+    g.fillStyle = hex(spec.color ?? 0x6a2c16); g.fillRect(0,0,w,h);
+    const p = spec.pattern || 'punct';
+    g.fillStyle='rgba(0,0,0,.22)'; for(let r=0;r<9;r++) for(let k=0;k<26;k++){ g.beginPath(); g.arc(w*(0.05+r*0.11), h*(0.04+k*0.037), 1.4, 0, 7); g.fill(); }
+    if(p==='spots'){ g.fillStyle='#120e0c'; for(let i=0;i<4;i++){ g.beginPath(); g.arc(w*(0.25+R()*0.5), h*(0.15+i*0.2+R()*0.05), 16+R()*8, 0, 7); g.fill(); } }
+    if(p==='stripes'){ g.fillStyle='#16120e'; for(const x of [0.12,0.42,0.72]) g.fillRect(w*x, 0, w*0.08, h); }
+    if(p==='margin'){ g.fillStyle='rgba(230,200,90,.9)'; g.fillRect(w*0.86,0,w*0.14,h); }
+  });
+}
+
+/* wing outlines: u = span (0..1), v = chord (+ anterior) */
+const OUTLINE = {
+  membrane:[[0,0.1],[0.25,0.22],[0.6,0.26],[0.88,0.18],[1,0.02],[0.95,-0.18],[0.75,-0.34],[0.45,-0.4],[0.18,-0.32],[0.04,-0.16],[0,-0.04]],
+  narrow:[[0,0.06],[0.3,0.15],[0.7,0.18],[0.94,0.12],[1,0],[0.96,-0.12],[0.7,-0.18],[0.3,-0.17],[0.07,-0.1],[0,-0.03]],
+  small:[[0,0.05],[0.4,0.12],[0.85,0.1],[1,0],[0.9,-0.14],[0.5,-0.2],[0.12,-0.12],[0,-0.03]],
+  tri:[[0,0.08],[0.4,0.2],[0.85,0.33],[1,0.27],[0.96,0.02],[0.82,-0.28],[0.52,-0.4],[0.2,-0.3],[0,-0.06]],
+  narrowtri:[[0,0.06],[0.4,0.14],[0.9,0.2],[1,0.14],[0.95,-0.06],[0.6,-0.18],[0.25,-0.18],[0,-0.04]],
+  round:[[0,0.05],[0.3,0.25],[0.65,0.3],[0.9,0.12],[0.95,-0.15],[0.75,-0.45],[0.4,-0.55],[0.12,-0.4],[0,-0.1]],
+  swallowtail:[[0,0.05],[0.3,0.25],[0.65,0.3],[0.9,0.1],[0.92,-0.2],[0.78,-0.42],[0.62,-0.5],[0.58,-0.86],[0.48,-0.56],[0.25,-0.5],[0.08,-0.36],[0,-0.1]],
+  fan:[[0,0.06],[0.4,0.12],[0.85,0.08],[1,-0.05],[0.9,-0.4],[0.6,-0.7],[0.25,-0.65],[0.05,-0.3],[0,-0.05]],
+  tegmen:[[0,0.07],[0.35,0.15],[0.8,0.16],[1,0.06],[0.98,-0.08],[0.7,-0.16],[0.3,-0.16],[0.05,-0.1],[0,-0.03]],
+  hemelytron:[[0,0.1],[0.3,0.22],[0.7,0.24],[0.94,0.14],[1,0],[0.93,-0.2],[0.6,-0.3],[0.25,-0.28],[0.05,-0.14],[0,-0.03]],
+  fringed:[[0,0.25],[0.5,0.3],[1,0.25],[1,-0.25],[0.5,-0.3],[0,-0.25]],
+};
+
+function wingMesh(spec, seed){
+  const pts = OUTLINE[spec.type] || OUTLINE.membrane; const S = spec.S, C = spec.C;
+  const sh = new T.Shape(); sh.moveTo(pts[0][0]*S, pts[0][1]*C); sh.splineThru(pts.slice(1).map(p => new T.Vector2(p[0]*S, p[1]*C))); sh.closePath();
+  const geo = new T.ShapeGeometry(sh, 28); const pos = geo.attributes.position, uv = geo.attributes.uv;
+  let vmin = Infinity, vmax = -Infinity; for(const p of pts){ vmin = Math.min(vmin, p[1]); vmax = Math.max(vmax, p[1]); }
+  for(let k=0;k<pos.count;k++){ const a = pos.getX(k), b = pos.getY(k); uv.setXY(k, Math.min(1,Math.max(0,a/S)), Math.min(1,Math.max(0,(b/C - vmin)/(vmax - vmin)))); pos.setXYZ(k, b, 0, a); }
+  geo.computeVertexNormals();
+  const opaque = (spec.alpha ?? 0.3) >= 0.9 || ['moth','nymph','swallow','pierid','blue','skipper','hawk','spots2','lantern'].includes(spec.pattern);
+  const mat = new T.MeshPhysicalMaterial({ map:wingTexture(spec, seed), transparent:true, side:T.DoubleSide, depthWrite:opaque, roughness:opaque?0.75:0.15, metalness:0, iridescence: spec.irid ? 0.9 : (opaque?0:0.4), iridescenceIOR:1.5 });
+  return new T.Mesh(geo, mat);
+}
+
+function elytronMesh(spec, seed, bodyMat){
+  const geo = new T.SphereGeometry(1, 30, 16, 0, Math.PI, 0, Math.PI/2);
+  geo.translate(-1, 0, 0); geo.scale(spec.S/2, spec.C*0.92, spec.C);
+  const mat = new T.MeshPhysicalMaterial({ map:elytronTexture(spec, seed), roughness:0.35, clearcoat:1, clearcoatRoughness:0.2, metalness: bodyMat.metalness, side:T.DoubleSide });
+  return new T.Mesh(geo, mat);
+}
+
+/* appendage builders: canonical frame x = anterior, y = up, z = lateral */
+function buildAntenna(style, L, M){
+  const g = new T.Group(); const P = a => a.map(([x,y,z]) => V(x*L,y*L,z*L)); const t = Math.max(0.011, 0.016*Math.min(L,1.4));
+  const curve = P([[0,0,0],[0.25,0.22,0.1],[0.6,0.36,0.25],[1,0.34,0.42]]);
+  const longCurve = P([[0,0,0],[0.2,0.18,0.12],[0.35,0.32,0.4],[0.25,0.36,0.75],[-0.05,0.3,1.0]]);
+  switch(style){
+    case 'aristate': { const p = P([[0,0,0],[0.18,0.03,0.05],[0.34,-0.05,0.1]]); g.add(chain(p, [t*1.8,t*2.4,t*3], M.limb)); g.add(ball(p[2], t*3.6, M.limb, 1.3, 1, 1));
+      const ar = P([[0.34,-0.05,0.1],[0.52,0.06,0.16],[0.78,0.12,0.24]]); g.add(tube(ar, t*0.3, M.dark, 16));
+      for(let k=1;k<7;k++){ const q = new T.CatmullRomCurve3(ar).getPoint(k/7); g.add(limb(q, q.clone().add(V(0.02*L, 0.06*L, 0)), t*0.15, t*0.1, M.dark)); g.add(limb(q, q.clone().add(V(0.02*L, -0.05*L, 0)), t*0.15, t*0.1, M.dark)); } break; }
+    case 'elbowed': { const p = P([[0,0,0],[0.32,0.32,0.06],[0.5,0.18,0.2],[0.72,0.04,0.3],[0.86,-0.02,0.36]]); g.add(chain(p, [t*1.6,t*1.4,t*1.2,t*1.3,t*1.9], M.limb)); g.add(ball(p[4], t*2.4, M.limb, 1.6,1,1)); break; }
+    case 'clubbed': { g.add(tube(curve, t*0.9, M.dark)); const end = curve[3]; const club = ball(end, t*2.6, M.dark, 2.2, 1, 1); orient(club, V(0.4,0,0.42), V(0,1,0), V(-0.42,0,0.4)); g.add(club); break; }
+    case 'clavate': { const p = P([[0,0,0],[0.3,0.2,0.15],[0.55,0.3,0.3],[0.7,0.32,0.4]]); g.add(chain(p, [t*1.3,t*1.2,t*1.3,t*1.5], M.limb)); [0.62,0.78,0.94].forEach((s,k)=>{ g.add(ball(V((0.72+k*0.09)*L,(0.33)*L,(0.42+k*0.05)*L), t*(2.4+k*0.6), M.limb)); }); break; }
+    case 'lamellate': { const p = P([[0,0,0],[0.25,0.15,0.12],[0.45,0.2,0.2]]); g.add(chain(p, [t*1.4,t*1.3,t*1.3], M.limb)); for(let k=0;k<3;k++){ const m = new T.Mesh(new T.BoxGeometry(0.14*L, 0.02*L, 0.08*L), M.limb); m.position.copy(V(0.52*L, (0.2+k*0.035)*L, 0.22*L)); g.add(m); } break; }
+    case 'pectinate': case 'pilose': { g.add(tube(curve, t*0.8, M.dark)); const c3 = new T.CatmullRomCurve3(curve); const n = style==='pilose'?14:18;
+      for(let k=1;k<n;k++){ const q = c3.getPoint(k/n); const tg = c3.getTangent(k/n); const len = (style==='pilose'?0.07:0.09)*L*(1 - k/n*0.6);
+        const dirs = style==='pilose' ? [V(0,1,0),V(0,-1,0),V(0,0,1),V(0,0,-1)] : [V(-tg.z,0.3,tg.x), V(tg.z,0.3,-tg.x)];
+        for(const d of dirs){ g.add(limb(q, q.clone().addScaledVector(d.normalize(), len), t*0.22, t*0.12, M.dark)); } } break; }
+    case 'moniliform': { const c3 = new T.CatmullRomCurve3(curve); for(let k=0;k<=11;k++){ g.add(ball(c3.getPoint(k/11), t*1.9, M.limb)); } break; }
+    case 'setaceous': { const p = P([[0,0,0],[0.3,0.12,0.12],[0.7,0.2,0.3],[1,0.22,0.42]]); g.add(chain(p, [t*2.2,t*1.6,t*0.7,t*0.3], M.limb)); break; }
+    case 'long': { g.add(tube(longCurve, t*0.75, M.dark, 60)); g.add(ball(longCurve[0], t*2, M.limb)); break; }
+    default: { g.add(tube(curve, t*0.9, M.dark)); g.add(ball(curve[0], t*1.8, M.limb)); }
+  }
+  return g;
+}
+
+function buildLeg(kind, L, tpl, M){
+  const style = kind==='fore' ? tpl.legs.fore : kind==='hind' ? tpl.legs.hind : 'walk';
+  const s = kind==='fore' ? 1 : kind==='hind' ? -1 : -0.15;
+  let p, r;
+  if(style==='jump' && kind==='hind'){ p = [[0,0,0],[-0.04,-0.06,0.1],[-0.22,0.3,0.32],[-0.62,-0.2,0.42],[-0.72,-0.4,0.48],[-0.82,-0.44,0.54]]; r = [1.3,1.6,2.3,0.9,0.6,0.4]; }
+  else { p = [[0,0,0],[0.03*s,-0.07,0.1],[0.2*s,0.16,0.4],[0.32*s,-0.42,0.6],[0.4*s,-0.5,0.72],[0.47*s,-0.55,0.82]]; r = [1.2,1.2,1.15,0.8,0.5,0.35]; }
+  const t = Math.max(0.012, 0.03*L*(tpl.legs.thick||1));
+  const pts = p.map(([x,y,z]) => V(x*L, y*L, z*L));
+  return chain(pts, r.map(k => k*t), M.limb);
+}
+
+function buildMouth(kind, s, M){
+  const P = a => a.map(([x,y,z]) => V(x*s,y*s,z*s)); const t = 0.03*s;
+  switch(kind){
+    case 'mandible': { const g = chain(P([[0,0,0],[0.12,-0.07,0.05],[0.21,-0.1,-0.03]]), [t*1.8,t*1.4,t*0.4], M.dark); return {obj:g}; }
+    case 'maxilla': { const g = new T.Group(); g.add(chain(P([[0,0,0],[0.1,-0.1,0.02],[0.16,-0.14,-0.02]]), [t*1.2,t,t*0.5], M.limb)); g.add(chain(P([[0.06,-0.06,0.03],[0.12,-0.14,0.1],[0.17,-0.24,0.12],[0.22,-0.3,0.11],[0.26,-0.34,0.09]]), [t*0.8,t*0.75,t*0.7,t*0.6,t*0.4], M.limb)); return {obj:g}; }
+    case 'labium': { const g = chain(P([[0,0,0],[0.06,-0.1,0.04],[0.1,-0.18,0.06],[0.13,-0.24,0.06]]), [t*0.9,t*0.8,t*0.7,t*0.45], M.limb); return {obj:g}; }
+    case 'maxpalp': { const g = chain(P([[0,0,0],[0.08,-0.04,0.05],[0.15,-0.02,0.07]]), [t*0.7,t*0.9,t*1.1], M.dark); return {obj:g}; }
+    case 'labialpalp': { const g = chain(P([[0,0,0],[0.1,0.04,0.03],[0.17,0.17,0.04]]), [t*1.2,t*1.2,t*0.7], M.limb); return {obj:g}; }
+    case 'proboscis': { const pts = []; for(let k=0;k<=40;k++){ const a = k/40*Math.PI*3.4; const rr = 0.2*s*(1 - k/48); pts.push(V(0.06*s + Math.sin(a)*rr, -0.08*s - rr + Math.cos(a)*rr, 0)); } return {obj:tube(pts, t*0.5, M.dark, 80), median:true}; }
+    case 'rostrum': { const g = chain(P([[0,0,0],[-0.05,-0.25,0],[-0.45,-0.42,0],[-0.95,-0.45,0]]), [t*1.1,t,t*0.9,t*0.5], M.dark); return {obj:g, median:true}; }
+    case 'proboscisFwd': { const g = chain(P([[0,0,0],[0.35,-0.25,0],[1.15,-0.62,0]]), [t*1,t*0.8,t*0.3], M.dark); return {obj:g, median:true}; }
+    case 'labellum': { const g = new T.Group(); g.add(limb(V(0,0,0), V(0.04*s,-0.22*s,0), t*1.6, t*1.4, M.limb)); g.add(ball(V(0.07*s,-0.27*s,0.05*s), t*2.4, M.limb, 1.2,0.7,1)); g.add(ball(V(0.07*s,-0.27*s,-0.05*s), t*2.4, M.limb, 1.2,0.7,1)); return {obj:g, median:true}; }
+    case 'glossa': { const g = new T.Group(); g.add(chain(P([[0,0,0],[0.08,-0.3,0],[0.1,-0.58,0]]), [t*1.0,t*0.8,t*0.5], M.limb)); return {obj:g, median:true}; }
+    case 'nub': { return {obj:ball(V(0,-0.03*s,0), t*1.2, M.limb)}; }
+  }
+  return null;
+}
+
+
+/* materials */
+function makeMats(tpl, sp){
+  const R = rng((sp?.taxid||1)*13+1); const j = R()-0.5;
+  const body = new T.Color(tpl.body).offsetHSL(j*0.03, 0, j*0.05);
+  const mk = (c, extra={}) => new T.MeshPhysicalMaterial({ color:c, roughness: tpl.hairy ? 0.92 : Math.max(0.18, 0.55 - tpl.sheen*0.35), metalness: tpl.metal||0, clearcoat: tpl.hairy ? 0 : tpl.sheen, clearcoatRoughness:0.3, ...extra });
+  return { body:mk(body), bodyColor:body, dark:mk(new T.Color(tpl.accent)), limb:mk(body.clone().lerp(new T.Color(tpl.accent), 0.45)),
+    eye:new T.MeshStandardMaterial({ map:ommatidia(tpl.head.eyeColor), roughness:0.25, metalness:0.1 }), mk };
+}
+
+/* build the whole insect */
+function buildInsect(b, grow){
+  const tpl = state.tpl, e = state.expr, sp = state.sp; const seed = sp?.taxid || 1;
+  const ids = SEG.map((_, i) => identityOf(i, e)); const defIds = SEG.map((_, i) => identityOf(i, DEF));
+  const root = new T.Group(); const M = makeMats(tpl, sp); const flaps = [], grows = [], segMeshes = [], keys = new Set();
+  const [fy, fz] = tpl.flat; const hr = tpl.head.r;
+  const add = (key, obj, side=1, parent=root) => { const w = new T.Group(); w.add(obj); w.userData.side = side; keys.add(key); if(grow && !b.keys.has(key) && b.insect){ w.scale.set(0.001,0.001,0.001*side); grows.push({obj:w,k:0,side}); } else w.scale.set(1,1,side); parent.add(w); return w; };
+
+  // layout
+  const segs = []; let x = -hr*0.82;
+  tpl.thorax.forEach(([len, r], k) => { segs[5+k] = {x:x-len/2, len, r}; x -= len*0.9; });
+  const A = tpl.abd;
+  for(let k=0;k<10;k++){ const t = k/9; let r = (A.r0 + (A.r1 - A.r0)*Math.pow(t, 1.4)) * (1 + A.bulge*Math.sin(Math.PI*Math.min(1, t*1.25))); let len = A.len*(k>=8 ? 0.7 : 1);
+    if(A.waist && k===0){ r = Math.min(r, tpl.thorax[2][1]*0.85); }
+    if(A.waist && k===1){ r = 0.05 + A.r0*0.12; len = A.len*0.9; }
+    segs[8+k] = {x:x-len/2, len, r}; x -= len*0.88; }
+
+  const stainCol = i => { const g = dominantOf(i, e); return g ? new T.Color(GCOL[g]) : null; };
+  // head
+  const headMat = M.body.clone(); if(state.stain){ const c = stainCol(0); headMat.color = c ? M.bodyColor.clone().lerp(c,0.7) : M.bodyColor.clone(); }
+  const head = new T.Mesh(SPH, headMat); head.scale.set(hr, hr*0.92*fy, hr*0.95*fz); head.userData.seg = 'head'; root.add(head); segMeshes.push(head);
+  const eyeR = Math.min(hr*0.62, hr*0.36*tpl.head.eye);
+  for(const sd of [1,-1]){
+    let ep = V(hr*0.22, hr*0.16, sd*hr*0.66*fz);
+    if(tpl.head.stalk){ const tip = V(hr*0.1, hr*0.2, sd*(hr + tpl.head.stalk)); root.add(limb(V(0,hr*0.1,sd*hr*0.5), tip, hr*0.1, hr*0.08, M.limb)); ep = tip; }
+    root.add(ball(ep, eyeR, M.eye, 0.85, 1, 0.75));
+  }
+  let mouthOrigin = V(0,0,0);
+  if(tpl.head.snout){ const tip = V(hr*0.8 + tpl.head.snout, -hr*0.35 - tpl.head.snout*0.35, 0); root.add(limb(V(hr*0.6,-hr*0.1,0), tip, hr*0.24, hr*0.16, M.body)); mouthOrigin = tip.clone().sub(V(hr*0.6, -hr*0.4, 0)); }
+  const headAnchor = [ V(hr*0.62, hr*0.44, hr*0.36), V(hr*0.84, hr*0.06, hr*0.3), V(hr*0.8,-hr*0.38,hr*0.24).add(mouthOrigin), V(hr*0.6,-hr*0.62,hr*0.3).add(mouthOrigin), V(hr*0.32,-hr*0.8,hr*0.12).add(mouthOrigin) ];
+
+  // trunk segments
+  for(let i=5;i<18;i++){ const s = segs[i]; const mat = M.body.clone();
+    if(A.bands && i>=8) mat.color = new T.Color(A.bands[(i-8)%2]);
+    if(state.stain){ const c = stainCol(i); mat.color = c ? mat.color.clone().lerp(c, 0.72) : mat.color; }
+    const m = new T.Mesh(SPH, mat); m.position.set(s.x, 0, 0); m.scale.set(s.len*0.62, s.r*0.92*fy, s.r*fz); m.userData.seg = i; root.add(m); segMeshes.push(m); }
+  if(state.stain){ for(let i=0;i<5;i++){ const c = stainCol(i); if(!c) continue; const mm = new T.MeshStandardMaterial({color:c, roughness:0.4, emissive:c, emissiveIntensity:0.25}); const p = headAnchor[i].clone(); p.z = 0; p.x = hr*0.95; root.add(ball(p, hr*0.12, mm)); } }
+
+  // appendages
+  const legLen = id => tpl.legs.len[{T1:0,T2:1,T3:2}[id]];
+  let foreN = 0; // repeated front wings (e.g. T3 with T2 identity) sweep further back so they do not hide each other
+   for(let i=0;i<18;i++){
+    const id = ids[i], vk = ventralKind(id, tpl), dk = dorsalKind(id, i, tpl); const isHead = i<=4; const seg = segs[i];
+    if(vk){
+      for(const sd of [1,-1]){
+        let part = null, median = false;
+        if(vk==='antenna'){ part = buildAntenna(tpl.ant.style, tpl.ant.len * (isHead ? 1 : 0.8), M); }
+        else if(vk.startsWith('leg-')){ part = buildLeg(vk.slice(4), legLen(id) * (isHead ? 0.55 : i>=8 ? 0.85 : 1), tpl, M); }
+        else { const r = buildMouth(vk, isHead ? hr*2.6 : seg.r*3.2, M); if(r){ part = r.obj; median = !!r.median; } }
+        if(!part) continue; if(median && sd<0) continue;
+        const w = new T.Group(); w.add(part);
+        if(isHead){ const a = headAnchor[i].clone(); a.z *= median ? 0 : fz; w.position.copy(a);
+          if(vk.startsWith('leg-')) orient(part, V(0,1,0.2), V(0,0,0), V(0.85,-0.1,0.5));
+          else if(vk==='antenna' && i!==0) orient(part, V(1,-0.2,0.3), V(0,1,0), V(0,0,1));
+        } else { w.position.set(seg.x, -seg.r*0.55*fy, median ? 0 : seg.r*0.55*fz);
+          if(vk==='antenna') orient(part, V(0.15,-0.6,1), V(0,1,0), V(-1,0,0.15));
+        }
+        add(`v${i}-${vk}`, w, median ? 1 : sd);
+      }
+    }
+    if(dk){
+      const spec = dk==='fore' ? tpl.fore : tpl.hind; const sc = i>=8 ? 0.8 : 1; const dup = dk==='fore' ? foreN++ : 0;
+      for(const sd of [1,-1]){
+        const anchor = new T.Group(); const isEly = spec.type==='elytron';
+        anchor.position.set(seg.x + seg.len*0.18, (isEly && !state.spread ? seg.r*0.2 : seg.r*0.72)*fy, isEly ? 0.02 : seg.r*0.42*fz);
+        const flap = new T.Group(); const pose = new T.Group(); anchor.add(flap); flap.add(pose);
+        let mesh;
+        if(spec.type==='haltere'){ mesh = new T.Group(); mesh.add(limb(V(0,0,0), V(-0.05, 0.03, spec.S*0.85), 0.018, 0.012, M.limb)); mesh.add(ball(V(-0.05,0.03,spec.S*0.9), 0.06, M.limb)); }
+        else if(isEly){ mesh = elytronMesh({...spec, S:spec.S*sc}, seed, M.body); }
+        else mesh = wingMesh({...spec, S:spec.S*sc, C:spec.C*sc}, seed);
+        pose.add(mesh);
+        const q = new T.Quaternion(); const qy = a => new T.Quaternion().setFromAxisAngle(V(0,1,0), a); const qx = a => new T.Quaternion().setFromAxisAngle(V(1,0,0), a); const qz = a => new T.Quaternion().setFromAxisAngle(V(0,0,1), a);
+        if(isEly) q.copy(state.spread ? qy(0.55 - 0.35*dup).multiply(qz(-0.55)) : qz(0.02));
+        else if(spec.type==='haltere') q.copy(qy(-0.35));
+        else if(state.spread){ const lep = tpl.fold==='up' || tpl.fold==='roof'; q.copy(qy((dk==='fore' ? (lep ? 0.12 : -0.18) : (lep ? -0.32 : -0.5)) - 0.42*dup).multiply(qx(-0.08))); }
+        else if(tpl.fold==='up') q.copy(qx(-1.35).multiply(qy(dk==='fore'?-0.15:-0.55)));
+        else if(tpl.fold==='roof') q.copy(qx(0.5).multiply(qy(-1.4)));
+        else q.copy(qy(-1.42).multiply(qx(dk==='fore' ? -0.04 : 0.02)));
+        pose.quaternion.copy(q);
+        if(!state.spread && !isEly && spec.type!=='haltere') pose.position.y = dk==='fore' ? 0.12 : 0.08;
+        const amp = spec.type==='haltere' ? 0.6 : isEly ? 0.12 : 0.38; const freq = spec.type==='haltere' ? 14 : tpl.order==='Lepidoptera' ? 5 : 9;
+        flaps.push({obj:flap, amp: -amp, freq, phase: spec.type==='haltere' ? Math.PI : 0});
+        add(`d${i}-${dk}-${spec.type}`, anchor, sd);
+      }
+    }
+  }
+  // terminalia and cornicles
+  const last = segs[17]; const tipX = last.x - last.len*0.5;
+  const term = new Set(tpl.term);
+  if(ids[17]==='PA'){
+    if(term.has('cerci')) for(const sd of [1,-1]) add('t-cerci', tube([V(tipX+0.05,0.02,sd*last.r*0.5), V(tipX-0.25,0.06,sd*(last.r*0.5+0.12)), V(tipX-0.55,0.1,sd*(last.r*0.5+0.22))], 0.016, M.dark, 12), 1);
+    if(term.has('cerci3')) for(const dz of [-1,0,1]) add('t-c3'+dz, tube([V(tipX,0.02,dz*0.04), V(tipX-0.6,0.08,dz*0.25), V(tipX-1.3,0.1,dz*0.5)], 0.012, M.dark, 16), 1);
+    if(term.has('sting')) add('t-sting', limb(V(tipX+0.04,0,0), V(tipX-0.18,-0.03,0), 0.03, 0.004, M.dark), 1);
+  }
+  if(ids[15]==='PA' && term.has('ovipositor')){ const s8 = segs[15]; const long = tpl.legs.hind==='jump'; add('t-ovi', chain([V(s8.x,-s8.r*0.6,0), V(tipX-(long?0.3:0.1),-s8.r*0.55,0), V(tipX-(long?0.9:0.45),-s8.r*(long?0.2:0.4),0)], [0.03,0.025,0.006], M.dark, false), 1); }
+  if(term.has('cornicles') && ids[12]==='AB'){ const s5 = segs[12]; for(const sd of [1,-1]) add('t-corn', limb(V(s5.x, s5.r*0.6*fy, sd*s5.r*0.5*fz), V(s5.x-0.22, s5.r*1.1*fy, sd*s5.r*0.75*fz), 0.035, 0.022, M.dark), 1); }
+
+  return {root, flaps, grows, segMeshes, keys, ids, defIds, segs, headAnchor};
+}
+
+function disposeTree(o){ o.traverse(n => { if(n.geometry && n.geometry !== SPH) n.geometry.dispose(); if(n.material){ const m = n.material; if(m.map) m.map.dispose(); m.dispose(); } }); }
+
+function rebuild3D(frame=false){
+  const b = three; if(!b) return;
+  const res = buildInsect(b, !frame);
+  if(b.insect){ b.scene.remove(b.insect); disposeTree(b.insect); }
+  b.insect = res.root; b.flaps = res.flaps; b.grows = res.grows; b.segMeshes = res.segMeshes; b.keys = res.keys;
+  b.scene.add(res.root);
+  addLabels(b, res);
+  const box = new T.Box3().setFromObject(res.root); const c = box.getCenter(new T.Vector3()); const size = box.getSize(new T.Vector3());
+  b.shadow.position.set(c.x, box.min.y - 0.02, c.z); b.shadow.scale.set(size.x*1.5, size.z*1.5 + 0.5, 1);
+  if(frame){ const r = (Math.max(size.x, size.z, size.y) * 0.85 + 0.6) / Math.min(1, Math.pow(b.camera.aspect, 0.75)); b.controls.target.copy(c); b.camera.position.copy(c).add(V(r*0.55, r*0.45, r*1.15)); b.controls.update(); }
+}
+
+function addLabels(b, res){
+  for(const old of b.labelObjs || []){ old.removeFromParent(); old.element.remove(); }
+  b.labelObjs = [];
+  if(!state.labels) return;
+  const hr = state.tpl.head.r;
+  for(let i=0;i<18;i++){
+    const g = dominantOf(i, state.expr); const id = res.ids[i]; const changed = id !== res.defIds[i];
+    if(i>8 && i<17 && !changed && g === dominantOf(i-1, state.expr) && id === res.ids[i-1]) continue; // collapse runs of identical abdominal segments
+    const el = document.createElement('div'); el.className = 'seglabel' + (changed ? ' changed' : '');
+    el.innerHTML = g ? `<span class="dot" style="background:${GCOL[g]}"></span><b>${GLABEL[g]}</b><em>${SEG[i]}</em>` : `<span class="dot" style="background:transparent;border:1px solid currentColor"></span><em>${SEG[i]} · none</em>`;
+    const o = new b.lib.CSS2DObject(el);
+    if(i<=4) o.position.set(hr*1.35 + 0.3, hr*1.05 + 0.2 - i*Math.max(hr*0.42, 0.16), 0);
+    else { const s = res.segs[i]; o.position.set(s.x, s.r + 0.24 + (i%3)*0.17, 0); }
+    res.root.add(o); b.labelObjs.push(o);
+  }
+}
+
+function setupHover(b){
+  const ray = new T.Raycaster(), ptr = new T.Vector2(), tip = $('#tip'); let last = 0;
+  b.renderer.domElement.addEventListener('pointermove', ev => {
+    const now = performance.now(); if(now - last < 40) return; last = now;
+    const r = b.renderer.domElement.getBoundingClientRect(); ptr.set((ev.clientX - r.left)/r.width*2 - 1, -(ev.clientY - r.top)/r.height*2 + 1);
+    ray.setFromCamera(ptr, b.camera); const hit = ray.intersectObjects(b.segMeshes, false)[0];
+    if(!hit){ tip.hidden = true; return; }
+    const s = hit.object.userData.seg; let html;
+    if(s==='head'){ html = `<b>Head</b> · An–Lb<br>${[0,1,2,3,4].map(i => `${SEG[i]}: ${esc(ID_NAME[identityOf(i,state.expr)])}`).join('<br>')}`; }
+    else { const on = GENES.filter(g => state.expr[g][s]).map(g => `<i>${GLABEL[g]}</i>`).join(', ') || 'none'; html = `<b>${SEG[s]}</b> · ${esc(ID_NAME[identityOf(s,state.expr)])} identity<br>Hox on: ${on}`; }
+    tip.innerHTML = html; tip.hidden = false; tip.style.left = Math.max(4, Math.min(ev.clientX - r.left + 14, r.width - 250)) + 'px'; tip.style.top = (ev.clientY - r.top + 14) + 'px';
+  });
+  b.renderer.domElement.addEventListener('pointerleave', () => tip.hidden = true);
+}
+
+/* ---------- UI ---------- */
+const spOrder = DATA.species;
+function renderOrders(){
+  const counts = {}; spOrder.forEach(s => counts[s.order] = (counts[s.order]||0) + 1);
+  $('#orderSel').innerHTML = `<option value="">All orders (${spOrder.length})</option>` + Object.keys(counts).sort().map(o => `<option value="${esc(o)}">${esc(o)} (${counts[o]})</option>`).join('');
+}
+function renderList(){
+  const q = $('#search').value.trim().toLowerCase(), o = $('#orderSel').value;
+  const items = spOrder.map((s, k) => [s, k]).filter(([s]) => (!o || s.order===o) && (!q || `${s.name} ${s.common||''} ${s.family} ${s.order}`.toLowerCase().includes(q)));
+  $('#spCount').textContent = `${items.length} insects to explore`;
+  requestAnimationFrame(() => { const L = $('#splist'), it = L.querySelector('.sp[aria-current="true"]'); if(it && (it.offsetTop < L.scrollTop || it.offsetTop > L.scrollTop + L.clientHeight - it.offsetHeight)) L.scrollTop = it.offsetTop - L.clientHeight/2; }); // scroll the list only, never the page
+  $('#splist').innerHTML = items.map(([s,k]) => `<button class="sp" role="listitem" data-k="${k}" aria-current="${s===state.sp}"><i>${esc(s.name)}</i><small>${esc(s.common ? s.common + ' · ' : '')}${esc(s.family)}</small><span class="cov" title="Hox genes with NCBI records">${Object.keys(s.hox).length}/8</span></button>`).join('') || '<p class="empty" style="padding:10px">No species match.</p>';
+}
+function renderLegend(){ $('#legend').innerHTML = GENES.map(g => `<span><i class="dot" style="background:${GCOL[g]}"></i>${GLABEL[g]}</span>`).join(''); }
+
+function renderGrid(){
+  const e = state.expr; const ids = SEG.map((_, i) => identityOf(i, e)); const defIds = SEG.map((_, i) => identityOf(i, DEF));
+  let h = `<thead><tr><th></th><th class="reg" colspan="5">Head</th><th class="reg" colspan="3">Thorax</th><th class="reg" colspan="10">Abdomen</th></tr><tr><th></th>${SEG.map(s => `<th scope="col">${s}</th>`).join('')}</tr></thead><tbody>`;
+  for(const g of GENES){
+    const rec = state.sp?.hox?.[g];
+    h += `<tr><td class="gene"><div class="gname"><span class="dot" style="background:${GCOL[g]}"></span><button type="button" class="gbtn" data-gene="${g}" title="About ${esc(GNAME[g])}"><i>${GLABEL[g]}</i></button><small class="sci-only">${rec ? 'NCBI ' + esc(rec.id) : 'no record'}</small><button class="rowbtn" type="button" data-ko="${g}" title="Knock out ${GLABEL[g]} everywhere">KO</button><button class="rowbtn" type="button" data-rs="${g}" title="Restore wild-type ${GLABEL[g]}">↺</button></div></td>`;
+    for(let i=0;i<18;i++){ const on = e[g][i], d = DEF[g][i];
+      h += `<td><button type="button" class="cell${on?' on':''}${d?' def':''}${on&&!d?' gain':''}${!on&&d?' loss':''}" style="--gc:${GCOL[g]}" data-g="${g}" data-i="${i}" aria-pressed="${!!on}" aria-label="${GLABEL[g]} in ${SEG[i]}: ${on?'on':'off'}"></button></td>`; }
+    h += '</tr>';
+  }
+  h += `<tr class="idrow"><td class="gene"><span class="hint">Identity</span></td>${ids.map((id,i) => `<td class="${id!==defIds[i]?'chg':''}" title="${esc(ID_NAME[id])}">${id==='DELETED'?'—':id}</td>`).join('')}</tr></tbody>`;
+  $('#hoxgrid').innerHTML = h;
+}
+
+function renderSheet(){
+  const sp = state.sp;
+  $('#spName').textContent = sp.name; $('#spCommon').textContent = sp.common || '';
+  $('#spMeta').innerHTML = `<span class="chip">${esc(sp.order)}</span><span class="chip">${esc(sp.family)}</span><span class="chip sci-only">NCBI taxon ${esc(sp.taxid)}</span>`;
+  $('#recTable').innerHTML = `<thead><tr><th>Gene</th><th>NCBI symbol</th><th>Gene ID</th><th>Chr</th></tr></thead><tbody>` + GENES.map(g => { const r = sp.hox[g];
+    return `<tr><td><span class="dot" style="background:${GCOL[g]}"></span> <i>${GLABEL[g]}</i></td>` + (r ? `<td class="sym">${esc(r.sym)}</td><td><a href="https://www.ncbi.nlm.nih.gov/gene/${encodeURIComponent(r.id)}" target="_blank" rel="noopener">${esc(r.id)}</a></td><td>${esc(r.chr || '—')}</td>` : `<td class="miss" colspan="3">— no NCBI record</td>`) + '</tr>'; }).join('') + '</tbody>';
+  renderChanges();
+}
+
+function renderChanges(){
+  const e = state.expr, tpl = state.tpl;
+  const out = diffAll(e, tpl, state.sp.order, PHENO.records || []).map(c => {
+    const top = dominantOf(c.i, e);
+    const why = top ? `<i>${GLABEL[top]}</i> is now the top-ranked Hox gene here` : 'no Hox gene is active here';
+    let ev; const rec = c.rec;
+    if(rec){ const ct = rec.citation || {}; const link = ct.doi ? `https://doi.org/${encodeURIComponent(ct.doi).replace(/%2F/g,'/')}` : ct.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(ct.pmid)}/` : null;
+      ev = `<span class="ev doc">Documented in <i>${esc(rec.species)}</i> (${esc(rec.stage||'')}) · ${link ? `<a href="${link}" target="_blank" rel="noopener">${esc((ct.authors||'').split(',')[0])} ${esc(ct.year||'')}</a>` : esc((ct.authors||'') + ' ' + (ct.year||''))}${rec.verified ? '' : ' · citation unverified'}</span><span class="hint">${esc(rec.summary||'')}</span>`; }
+    else if(c.conflict){ const k = c.conflict; ev = `<span class="ev bad">Published result differs: ${esc(ID_NAME[k.from])} → ${esc(ID_NAME[k.to] || k.to)} in <i>${esc(k.species)}</i></span><span class="hint">${esc(k.summary||'')} This model cannot reproduce it; see Known divergences.</span>`; }
+    else ev = `<span class="ev ext">Model extrapolation</span><span class="hint">${why}${c.gained.length ? '; gained ' + c.gained.map(g => GLABEL[g]).join(', ') : ''}${c.lost.length ? '; lost ' + c.lost.map(g => GLABEL[g]).join(', ') : ''}.</span>`;
+    return `<li><span class="what"><b>${c.seg}</b> ${esc(ID_NAME[c.from])} → ${esc(ID_NAME[c.to])}: ${esc(c.desc)}</span><span class="means">${esc(ID_EXPLAIN[c.to])}</span><div class="evbox sci-only">${ev}</div></li>`;
+  });
+  $('#changes').innerHTML = out.join('') || `<li class="empty">Normal body. Switch genes on or off in the map, or pick a fun mutant above.${tpl.note ? '<br><br>' + esc(tpl.note) : ''}</li>`;
+  const n = out.length; const st = $('#status'); st.textContent = n ? `${n} segment${n>1?'s':''} transformed` : 'Normal body'; st.classList.toggle('mut', !!n);
+}
+
+function previewCell(g, i){
+  const e = {}; GENES.forEach(k => e[k] = state.expr[k].slice()); const on = !e[g][i]; e[g][i] = on ? 1 : 0;
+  const before = identityOf(i, state.expr), after = identityOf(i, e); const gl = `<i>${GLABEL[g]}</i>`; const head = `${on ? 'Switching on' : 'Switching off'} ${gl} in ${SEG[i]}`;
+  if(before === after){ const top = dominantOf(i, e);
+    const why = top && top !== g ? `<i>${GLABEL[top]}</i> ${on ? 'outranks it and still sets' : 'still sets'} this segment's identity` : top === g ? `${gl} already sets this segment's identity` : 'the segment stays without Hox input';
+    return `${head}: no visible change, because ${why}.`; }
+  const base = identityOf(i, DEF); const m = after !== base ? matchEvidence(i, base, after, e, state.sp.order, PHENO.records || []) : null;
+  const ev = after === base ? ' This restores the wild type.' : m && m.rec ? ` <span class="ev doc">Documented in <i>${esc(m.rec.species)}</i></span>` : m && m.conflict ? ` <span class="ev bad">Published result differs (${esc(m.conflict.from)} → ${esc(m.conflict.to)} in <i>${esc(m.conflict.species)}</i>)</span>` : ' <span class="ev ext">Model extrapolation</span>';
+  return `${head} turns it from ${esc(ID_NAME[before])} to ${esc(ID_NAME[after])}: ${esc(describeChange(i, before, after, state.tpl))}. ${esc(ID_EXPLAIN[after])}${ev}`;
+}
+
+function renderGuide(){
+  const g = state.guide || 'Ubx', info = GENE_INFO[g], rec = state.sp?.hox?.[g];
+  $('#geneGuide').innerHTML = `<div class="guide"><div class="gname"><span class="dot" style="background:${GCOL[g]}"></span><i>${GLABEL[g]}</i><span class="hint">${esc(GNAME[g])}</span></div>
+    <dl><dt>Normal job</dt><dd>${info.role}</dd><dt>Switched off</dt><dd>${info.loss}</dd><dt>Switched on elsewhere</dt><dd>${info.gain}</dd>
+    <dt class="sci-only">In this species</dt><dd class="sci-only">${rec ? `NCBI Gene <a href="https://www.ncbi.nlm.nih.gov/gene/${encodeURIComponent(rec.id)}" target="_blank" rel="noopener">${esc(rec.id)}</a> (${esc(rec.sym)})` : 'No NCBI record'}</dd></dl>
+    <p class="hint">Click a gene name in the map to read about it. Point at any cell to preview its effect.</p></div>`;
+}
+
+let ATLAS_VIEW = [];
+function renderAtlas(){
+  const f = $('#atlasFilter').value, cls = ATLAS.classes || [];
+  const fmtN = n => Number(n || 0).toLocaleString('en-US');
+  $('#atlasMeta').innerHTML = cls.length ? `${fmtN(ATLAS.simulations)} simulations (${fmtN(ATLAS.edit_sets)} change sets × ${fmtN(ATLAS.species_count || (ATLAS.species||[]).length)} species) found ${fmtN(ATLAS.totals?.novel)} untested segment outcomes in ${cls.length} distinct types. AI-rated for plausibility; load any to see it on the current species.` : '';
+  ATLAS_VIEW = cls.filter(k => !f || k.plausibility === f);
+  const ord = state.sp?.order;
+  $('#atlas').innerHTML = ATLAS_VIEW.map((k,n) => { const fam = state.sp?.family; const here = (k.families||{})[fam] || k.orders[ord]; const ex = here ? `In ${esc((k.families||{})[fam] ? fam : ord)}: ${esc(here)}` : `Example (${esc(Object.keys(k.orders)[0])}): ${esc(Object.values(k.orders)[0])}`;
+    const ed = k.example_edits.map(e => e.op==='ko' ? `<i>${esc(GLABEL[normGene(e.gene)]||e.gene)}</i> knocked out` : `<i>${esc(GLABEL[normGene(e.gene)]||e.gene)}</i> ${esc(e.op)} in ${esc(e.segs.join(', '))}`).join(' + ');
+    return `<details class="hypo"><summary><span class="pl pl-${esc(k.plausibility)}">${esc(k.plausibility)}</span>${esc(k.seg)}: ${esc(ID_NAME[k.from])} → ${esc(ID_NAME[k.to])}</summary>
+      <p>${ex}</p><p><b>Smallest change:</b> ${ed} · reached by ${fmtN(k.edit_sets)} change sets</p><p><b>Biology check:</b> ${esc(k.reasoning)}${k.failure_rule ? ` <i>Likely failure: ${esc(k.failure_rule)}.</i>` : ''}</p>
+      <button class="btn" type="button" data-atlas="${n}">Load on this species</button></details>`; }).join('') || '<p class="empty">No outcomes for this filter.</p>';
+}
+let HYPO_SORTED = [];
+function renderHypos(){
+  const rank = {likely:0, possible:1, unlikely:2};
+  HYPO_SORTED = (HYPO.items || []).slice().sort((a,b) => (rank[a.plausibility] ?? 3) - (rank[b.plausibility] ?? 3));
+  $('#hypoMeta').innerHTML = HYPO_SORTED.length ? `${HYPO_SORTED.length} predictions from ${esc(HYPO.method || 'simulation runs')}. None of these has been observed; each is the model's output plus an AI check against known biology.` : '';
+  $('#hypos').innerHTML = HYPO_SORTED.map((h,k) => `<details class="hypo"><summary><span class="pl pl-${esc(h.plausibility)}">${esc(h.plausibility)}</span>${esc(h.title)}</summary>
+    <p><b>Try it on</b> <i>${esc(h.species)}</i> (${esc(h.order||'')}). <b>Model predicts:</b> ${esc(h.predicted)}</p>
+    <p><b>Biology check:</b> ${esc(h.reasoning)}</p>${h.experiment ? `<p><b>How it could be tested:</b> ${esc(h.experiment)}</p>` : ''}${h.caveats ? `<p><b>Caveats:</b> ${esc(h.caveats)}</p>` : ''}
+    <button class="btn" type="button" data-hypo="${k}">Load this mutant</button></details>`).join('') || '<p class="empty">No simulation results yet.</p>';
+}
+
+let raf = 0;
+function refresh(frame=false){ cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { renderGrid(); renderChanges(); rebuild3D(frame); }); }
+
+function selectSpecies(sp){
+  state.sp = sp; state.tpl = templateFor(sp); state.tpl.order = sp.order; state.expr = defaultExpr(); $('#preset').value = '';
+  renderList(); renderSheet(); renderGrid(); renderGuide(); renderAtlas(); rebuild3D(true);
+  try{ localStorage.setItem('hox-sp', String(sp.taxid)); }catch(_){}
+}
+
+let toastT = 0;
+function toast(msg){ const t = $('#toast'); t.innerHTML = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 3200); }
+
+const PRESETS = [
+  ['ubx-ko','Four wings (Ubx off in T3)', e => setOn(e,'Ubx',[7],0)],
+  ['ubx-all','Ubx off everywhere (adds a model guess on A1)', e => ko(e,'Ubx')],
+  ['ubx-t2','Wings shrink to knobs (Ubx on in T2)', e => setOn(e,'Ubx',[6],1)],
+  ['antp-head','Legs on the head (Antp in the antenna)', e => setOn(e,'Antp',[0],1)],
+  ['antp-ko','Legs turn into antennae (Antp off)', e => ko(e,'Antp')],
+  ['scr-ko','Wings on the first chest segment (Scr off)', e => ko(e,'Scr')],
+  ['pb-ko','Mouth feelers turn into legs (pb off)', e => ko(e,'pb')],
+  ['pb-ant','Antenna turns into a mouth feeler (pb in the antenna)', e => setOn(e,'pb',[0],1)],
+  ['dfd-ko','No jaws (Dfd off)', e => ko(e,'Dfd')],
+  ['abd-legs','Legs on the belly (Ubx + abd-A off)', e => { ko(e,'Ubx'); ko(e,'abdA'); }],
+  ['bxc','Three genes off at once (Ubx, abd-A, Abd-B)', e => { ko(e,'Ubx'); ko(e,'abdA'); ko(e,'AbdB'); }],
+  ['abdb-ko','No tail-end parts (Abd-B off)', e => ko(e,'AbdB')],
+];
+function ko(e, g){ e[g].fill(0); }
+function setOn(e, g, idx, v){ idx.forEach(i => e[g][i] = v); }
+
+function randomMutation(){
+  const before = JSON.stringify(GENES.map(g => [...state.expr[g]]));
+  for(let tries=0; tries<30; tries++){ const msg = tryMutation(); if(JSON.stringify(GENES.map(g => [...state.expr[g]])) !== before){ $('#preset').value=''; toast(msg); refresh(); return; } }
+}
+function tryMutation(){
+  const R = Math.random; const g = GENES[Math.floor(R()*8)]; const e = state.expr; const on = [...e[g]].map((v,i) => v ? i : -1).filter(i => i>=0);
+  const kind = Math.floor(R()*4); let msg;
+  if(kind===0 || !on.length && kind===2){ ko(e,g); msg = `Knocked out <i>${GLABEL[g]}</i>`; }
+  else if(kind===1){ const i = Math.floor(R()*18); e[g][i] = 1; msg = `Switched <i>${GLABEL[g]}</i> on in ${SEG[i]}`; }
+  else if(kind===2){ const a = Math.min(...on); const n = 1 + Math.floor(R()*2); for(let i=Math.max(0,a-n);i<a;i++) e[g][i]=1; msg = `Expanded <i>${GLABEL[g]}</i> forward by ${n} segment${n>1?'s':''}`; }
+  else { const i = on.length ? on[Math.floor(R()*on.length)] : Math.floor(R()*18); e[g][i] = 0; msg = `Removed <i>${GLABEL[g]}</i> from ${SEG[i]}`; }
+  return msg;
+}
+
+function bind(){
+  $('#search').addEventListener('input', renderList); $('#orderSel').addEventListener('change', renderList);
+  $('#splist').addEventListener('click', ev => { const btn = ev.target.closest('.sp'); if(btn) selectSpecies(spOrder[+btn.dataset.k]); });
+  const sel = $('#preset'); sel.innerHTML += PRESETS.map(([id,name]) => `<option value="${id}">${esc(name)}</option>`).join('');
+  sel.addEventListener('change', () => { const p = PRESETS.find(x => x[0]===sel.value); if(!p) return; state.expr = defaultExpr(); p[2](state.expr); toast(p[1]); refresh(); });
+  $('#resetBtn').addEventListener('click', () => { state.expr = defaultExpr(); sel.value=''; refresh(); });
+  $('#randomBtn').addEventListener('click', randomMutation);
+  const grid = $('#hoxgrid'); let painting = null;
+  let lastPtr = 'mouse';
+  grid.addEventListener('pointerdown', ev => { lastPtr = ev.pointerType; const c = ev.target.closest('.cell'); if(!c || ev.pointerType==='touch') return; ev.preventDefault(); c.releasePointerCapture?.(ev.pointerId); const g = c.dataset.g, i = +c.dataset.i; showPrev(c); state.guide = g; renderGuide(); painting = state.expr[g][i] ? 0 : 1; state.expr[g][i] = painting; sel.value=''; refresh(); });
+  grid.addEventListener('click', ev => { if(lastPtr!=='touch') return; const c = ev.target.closest('.cell'); if(!c) return; const g = c.dataset.g, i = +c.dataset.i; showPrev(c); state.guide = g; renderGuide(); state.expr[g][i] ^= 1; sel.value=''; refresh(); });
+  grid.addEventListener('pointerover', ev => { if(painting===null || !(ev.buttons&1)) return; const c = ev.target.closest('.cell'); if(!c) return; const g = c.dataset.g, i = +c.dataset.i; if(state.expr[g][i] !== painting){ state.expr[g][i] = painting; refresh(); } });
+  addEventListener('pointerup', () => painting = null); addEventListener('pointercancel', () => painting = null);
+  grid.addEventListener('keydown', ev => { const c = ev.target.closest('.cell'); if(!c || (ev.key!=='Enter' && ev.key!==' ')) return; ev.preventDefault(); const g = c.dataset.g, i = +c.dataset.i; showPrev(c); state.guide = g; renderGuide(); state.expr[g][i] ^= 1; sel.value=''; refresh(); requestAnimationFrame(() => requestAnimationFrame(() => grid.querySelector(`.cell[data-g="${g}"][data-i="${i}"]`)?.focus())); });
+  const showPrev = c => { if(c) $('#preview').innerHTML = previewCell(c.dataset.g, +c.dataset.i); };
+  grid.addEventListener('mouseover', ev => showPrev(ev.target.closest('.cell')));
+  grid.addEventListener('focusin', ev => showPrev(ev.target.closest('.cell')));
+  grid.addEventListener('click', ev => { const gb = ev.target.closest('[data-gene]'); if(gb){ state.guide = gb.dataset.gene; renderGuide(); } });
+  $('#atlasFilter').addEventListener('change', renderAtlas);
+  $('#atlas').addEventListener('click', ev => { const b = ev.target.closest('[data-atlas]'); if(!b) return; const k = ATLAS_VIEW[+b.dataset.atlas]; if(!k) return;
+    state.expr = applyEdits(defaultExpr(), k.example_edits); sel.value=''; toast(`Loaded: ${esc(k.seg)} ${esc(k.from)} → ${esc(k.to)}`); refresh(); $('#stage').scrollIntoView({block:'nearest'}); });
+  $('#hypos').addEventListener('click', ev => { const b = ev.target.closest('[data-hypo]'); if(!b) return; const h = HYPO_SORTED[+b.dataset.hypo]; if(!h) return;
+    const sp = spOrder.find(x => x.name === h.species) || spOrder.find(x => x.order === h.order); if(sp && sp !== state.sp) selectSpecies(sp);
+    state.expr = applyEdits(defaultExpr(), h.edits); sel.value=''; toast('Loaded: ' + esc(h.title)); refresh(); $('#stage').scrollIntoView({block:'nearest'}); });
+  grid.addEventListener('click', ev => { const k = ev.target.closest('[data-ko]'), r = ev.target.closest('[data-rs]');
+    if(k){ ko(state.expr, k.dataset.ko); sel.value=''; refresh(); } if(r){ state.expr[r.dataset.rs] = DEF[r.dataset.rs].slice(); sel.value=''; refresh(); } });
+  const tog = (id, key, after) => { const b = $(id); b.setAttribute('aria-pressed', String(state[key])); b.addEventListener('click', () => { state[key] = !state[key]; b.setAttribute('aria-pressed', String(state[key])); after && after(); }); };
+  tog('#tLabels','labels', () => rebuild3D()); tog('#tStain','stain', () => rebuild3D());
+  tog('#tPose','spread', () => { $('#tPose').textContent = state.spread ? 'Wings spread' : 'Wings folded'; rebuild3D(); });
+  tog('#tAnim','anim');
+  $('#tCam').addEventListener('click', () => rebuild3D(true));
+}
+
+/* ---------- lessons ---------- */
+const store = { get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); }catch(_){ return d; } }, set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(_){} } };
+const richText = t => esc(t).replace(/&lt;(\/?)([ib])&gt;/g, '<$1$2>'); // lesson text may use <i> and <b> only
+let lsIdx = Math.min(store.get('hox-lesson', 0), Math.max(0, LESSONS.length - 1)); const quizDone = store.get('hox-quiz', {});
+function loadState(spName, edits){ const sp = spOrder.find(x => x.name === spName); if(sp && sp !== state.sp) selectSpecies(sp); state.expr = applyEdits(defaultExpr(), edits || []); $('#preset').value = ''; refresh(); }
+function renderLesson(){
+  const L = LESSONS[lsIdx]; if(!L) return; store.set('hox-lesson', lsIdx);
+  $('#lsCount').textContent = `Lesson ${lsIdx + 1} of ${LESSONS.length}`; $('#lsTitle').textContent = L.title;
+  $('#lsDots').innerHTML = LESSONS.map((x,k) => `<button type="button" class="ldot${k===lsIdx?' on':''}${quizDone[x.id]?' done':''}" data-ls="${k}" aria-label="Lesson ${k+1}: ${esc(x.title)}"></button>`).join('');
+  const q = L.quiz, d = quizDone[L.id];
+  $('#lsBody').innerHTML = (L.body || []).map(p => `<p>${richText(p)}</p>`).join('')
+    + (L.try ? `<div class="trybox"><button class="btn primary" type="button" id="lsTry">${esc(L.try.label || 'Try it')}</button><span class="hint">on <i>${esc(L.try.species)}</i></span>${L.look_for ? `<p class="hint">Look for: ${richText(L.look_for)}</p>` : ''}</div>` : '')
+    + (q ? `<div class="quiz"><p class="qq">${richText(q.q)}</p>${q.options.map((o,k) => `<button type="button" class="qopt${d ? (k===q.answer ? ' right' : k===d.pick ? ' wrong' : '') : ''}" data-opt="${k}" ${d ? 'disabled' : ''}>${richText(o)}</button>`).join('')}<p class="qfb" id="qfb">${d ? (d.pick===q.answer ? 'Correct. ' : 'Not quite. ') + richText(q.explain) : ''}</p></div>` : '');
+  $('#lsPrev').disabled = lsIdx === 0; $('#lsNext').textContent = lsIdx === LESSONS.length - 1 ? 'Finish' : 'Next lesson';
+}
+function openLearn(){ endTour(); $('#learn').hidden = false; renderLesson(); $('#lsClose').focus(); }
+function bindLearn(){
+  $('#learnBtn').addEventListener('click', openLearn);
+  $('#lsClose').addEventListener('click', () => { $('#learn').hidden = true; $('#learnBtn').focus(); });
+  $('#lsPrev').addEventListener('click', () => { if(lsIdx > 0){ lsIdx--; renderLesson(); } });
+  $('#lsNext').addEventListener('click', () => { if(lsIdx < LESSONS.length - 1){ lsIdx++; renderLesson(); } else { $('#learn').hidden = true; toast('Lessons finished. Keep experimenting in the Hox map.'); } });
+  $('#learn').addEventListener('click', ev => {
+    const dot = ev.target.closest('[data-ls]'); if(dot){ lsIdx = +dot.dataset.ls; renderLesson(); return; }
+    if(ev.target.closest('#lsTry')){ const L = LESSONS[lsIdx]; loadState(L.try.species, L.try.edits);
+      if(innerWidth < 600){ $('#learn').hidden = true; $('#stage').scrollIntoView({ block: 'start' }); toast(`Loaded: ${esc(L.try.label || L.title)}. Tap Learn to return to lesson ${lsIdx + 1}.`); } // drawer covers the model on phones
+      else toast(`Loaded: ${esc(L.try.label || L.title)}`); return; }
+    const o = ev.target.closest('[data-opt]'); if(o){ const L = LESSONS[lsIdx]; quizDone[L.id] = {pick: +o.dataset.opt}; store.set('hox-quiz', quizDone); renderLesson(); }
+  });
+}
+
+/* ---------- guided tour ---------- */
+let tIdx = 0, tAutoT = 0, tEl = null;
+function runAction(a){ if(!a) return;
+  if(a.species){ const sp = spOrder.find(x => x.name === a.species); if(sp && sp !== state.sp) selectSpecies(sp); }
+  if(a.reset){ state.expr = defaultExpr(); $('#preset').value = ''; refresh(); }
+  if(a.preset){ const p = PRESETS.find(x => x[0] === a.preset); if(p){ state.expr = defaultExpr(); p[2](state.expr); $('#preset').value = p[0]; refresh(); } } }
+function placeTour(){
+  const spot = $('#tSpot'), box = $('#tBox'), bw = Math.min(340, innerWidth - 24); box.style.width = bw + 'px';
+  if(!tEl){ spot.style.display = 'none'; box.style.left = (innerWidth - bw)/2 + 'px'; box.style.top = '20%'; return; }
+  const r = tEl.getBoundingClientRect(), pad = 6, bh = box.offsetHeight;
+  Object.assign(spot.style, {display:'block', left:(r.left-pad)+'px', top:(r.top-pad)+'px', width:(r.width+2*pad)+'px', height:(r.height+2*pad)+'px'});
+  let top = r.bottom + 12; if(top + bh > innerHeight - 12) top = r.top - bh - 12; if(top < 12) top = Math.max(12, Math.min(innerHeight - bh - 12, r.top + 12));
+  box.style.top = top + 'px'; box.style.left = Math.min(Math.max(12, r.left), innerWidth - bw - 12) + 'px';
+}
+function showStep(){
+  const s = TOUR[tIdx]; if(!s){ endTour(); return; }
+  runAction(s.action); tEl = document.querySelector(s.target);
+  $('#tCount').textContent = `Step ${tIdx + 1} of ${TOUR.length}`; $('#tTitle').textContent = s.title; $('#tText').innerHTML = richText(s.text);
+  $('#tBack').disabled = tIdx === 0; $('#tNext').textContent = tIdx === TOUR.length - 1 ? 'Finish' : 'Next';
+  tEl?.scrollIntoView({block:'center', behavior: reduced ? 'auto' : 'smooth'}); placeTour(); setTimeout(placeTour, reduced ? 0 : 400);
+}
+function startTour(){ if(!TOUR.length) return; $('#learn').hidden = true; tIdx = 0; $('#tour').hidden = false; store.set('hox-toured', true); showStep(); $('#tNext').focus(); }
+function endTour(){ $('#tour').hidden = true; clearInterval(tAutoT); tAutoT = 0; $('#tAuto').setAttribute('aria-pressed','false'); }
+function stepTour(d){ tIdx += d; if(tIdx >= TOUR.length){ endTour(); toast('Tour finished. Open Learn for the lessons.'); return; } if(tIdx < 0) tIdx = 0; showStep(); }
+function bindTour(){
+  $('#tourBtn').addEventListener('click', startTour);
+  $('#tNext').addEventListener('click', () => stepTour(1)); $('#tBack').addEventListener('click', () => stepTour(-1)); $('#tSkip').addEventListener('click', endTour);
+  $('#tAuto').addEventListener('click', () => { const on = !tAutoT; $('#tAuto').setAttribute('aria-pressed', String(on)); if(on) tAutoT = setInterval(() => stepTour(1), 6500); else { clearInterval(tAutoT); tAutoT = 0; } });
+  addEventListener('resize', () => { if(!$('#tour').hidden) placeTour(); }); addEventListener('scroll', () => { if(!$('#tour').hidden) placeTour(); }, true);
+  addEventListener('keydown', ev => { if(ev.key === 'Escape'){ if(!$('#tour').hidden) endTour(); else if(!$('#learn').hidden) $('#learn').hidden = true; }
+    if(!$('#tour').hidden && (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') && !ev.target.closest('input,select')) stepTour(ev.key === 'ArrowRight' ? 1 : -1); });
+}
+
+
+/* ---------- Scientist mode, deep links ---------- */
+function setSci(on, save){
+  document.documentElement.classList.toggle('sci', !!on); $('#sciSw').setAttribute('aria-checked', String(!!on));
+  if(save) store.set('hox-scientist', !!on);
+}
+const DEFAULT_SPECIES = 'Drosophila melanogaster';
+function applyHash(initial){
+  const raw = location.hash.replace(/^#/, ''); if(!raw) return;
+  const sp = new URLSearchParams(raw);
+  if(!sp.has('sp') && !sp.has('e') && !sp.has('lesson')) return;
+  let name = sp.get('sp') || DEFAULT_SPECIES; if(!spOrder.some(x => x.name === name)) name = DEFAULT_SPECIES;
+  let edits = [];
+  try{ const j = JSON.parse(sp.get('e') || '[]'); if(Array.isArray(j)){ applyEdits(defaultExpr(), j); edits = j; } }catch(_){ edits = []; }
+  loadState(name, edits);
+  const L = LESSONS.find(x => x.id === sp.get('lesson')), bn = $('#lessonBanner');
+  if(L){ const n = LESSONS.indexOf(L) + 1;
+    $('#lbTitle').textContent = `Trying lesson ${n}: ${L.title}`;
+    $('#lbLook').innerHTML = L.look_for ? richText(L.look_for) : ''; $('#lbLook').hidden = !L.look_for;
+    $('#lbBack').href = 'learn.html#' + encodeURIComponent(L.id); bn.hidden = false; }
+  else bn.hidden = true;
+  if(innerWidth < 700) requestAnimationFrame(() => (bn.hidden ? $('#stage') : bn).scrollIntoView({block:'start'}));
+}
+function bindLab(){
+  $('#lbClose').addEventListener('click', () => { $('#lessonBanner').hidden = true; });
+  $('#sciSw').addEventListener('click', () => setSci(!document.documentElement.classList.contains('sci'), true));
+  addEventListener('hashchange', () => applyHash(false));
+}
+setSci(store.get('hox-scientist', false), false);
+
+/* ---------- boot ---------- */
+renderOrders(); renderLegend(); bind(); renderHypos(); bindLearn(); bindTour();
+$('#dataNote').innerHTML = `Species data: ${esc(DATA.source || 'NCBI')}, retrieved ${esc(String(DATA.generated||'').slice(0,10))}. ${DATA.species.length} insect species; ${esc(DATA.counts?.all8 ?? DATA.counts?.all_8 ?? '?')} have records for all eight genes. Phenotype records: ${(PHENO.records||[]).length}.`;
+let start = null; try{ const t = +localStorage.getItem('hox-sp'); start = spOrder.find(s => s.taxid===t); }catch(_){}
+start = start || spOrder.find(s => s.taxid===7227) || spOrder[0];
+const lib = await loadThree();
+if(lib){ SPH = new T.SphereGeometry(1, 28, 18); three = initScene(lib); } else showNoGL('The 3D library could not load. Reload the page to try again; the Hox map, records and change log still work.');
+selectSpecies(start);
+bindLab();
+applyHash(true);
+if(TOUR.length && !store.get('hox-toured', false)) setTimeout(() => toast('New here? Press <b>Take the tour</b> for a quick walk-through, or <b>Learn</b> for the lessons.'), 1200);
+if(location.protocol==='file:') window.__hox = { state, get three(){ return three; }, get T(){ return T; } }; // local test hook only
+</script>
+{{footer}}
+<script src="assets/site.js" defer></script>
+</body>
+</html>

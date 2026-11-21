@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Learn · Hox Insect Lab</title>
+<meta name="description" content="Eight short lessons on segments and Hox genes, each with a try-it button for the Lab and a quick quiz.">
+<meta property="og:title" content="Learn · Hox Insect Lab">
+<meta property="og:description" content="Eight short lessons on segments and Hox genes, each with a try-it button for the Lab and a quick quiz.">
+<meta property="og:image" content="assets/img/og.png">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="vendor/fonts/fonts.css">
+<link rel="stylesheet" href="assets/chrome.css">
+<link rel="stylesheet" href="assets/site.css">
+<script>(function(){try{var t=localStorage.getItem('hox-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
+</head>
+<body>
+<header class="site-head">
+  <a class="hx-skip" href="#main">Skip to content</a>
+  <div class="hx-bar">
+    <a class="hx-brand" href="index.html"><img src="assets/img/logo.svg" alt="" width="40" height="40"><span>Hox Insect Lab</span></a>
+    <button class="hx-theme" type="button" id="theme-toggle" aria-label="Switch to dark theme" title="Light or dark theme"><span aria-hidden="true" class="hx-theme-icon"></span></button>
+  </div>
+  <nav class="hx-nav" aria-label="Main">
+    <a href="learn.html" aria-current="page">Learn</a>
+    <a href="lab.html">Lab</a>
+    <a href="glossary.html">Glossary</a>
+    <a href="teachers.html">For Teachers</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+<main id="main" class="page">
+  <h1>Learn</h1>
+  <p class="lead">Eight short lessons. Read, try it in the Lab, then answer a quick question to earn a star.</p>
+  <p class="stars-total"><span aria-hidden="true" style="color:var(--sun)">&#9733;</span> <span id="stars-total">Loading&hellip;</span></p>
+  <nav aria-label="Lessons"><ol class="progress" id="progress"></ol></nav>
+  <div id="lesson"><p class="loading">Loading lessons&hellip;</p></div>
+  <noscript><p class="callout">The lessons need JavaScript. Please turn it on, or ask a teacher for the printed worksheet on the For Teachers page.</p></noscript>
+</main>
+
+<footer class="site-foot">
+  <div class="hx-foot-in">
+    <p class="hx-big">No accounts. No ads. No tracking.</p>
+    <p>Made with real insect gene data from NCBI.</p>
+    <p class="hx-links"><a href="about.html">About</a> <a href="teachers.html">For Teachers</a></p>
+    <p class="hx-small">Code: MIT licence</p>
+  </div>
+</footer>
+<script src="assets/site.js" defer></script>
+<script src="assets/learn.js" defer></script>
+</body>
+</html>

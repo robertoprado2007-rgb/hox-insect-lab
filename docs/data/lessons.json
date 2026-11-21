@@ -1,0 +1,286 @@
+{
+ "lessons": [
+  {
+   "id": "k1",
+   "title": "Segments and identity",
+   "subtitle": "An insect body is a row of pieces, and each piece gets its own job.",
+   "picture": "segments",
+   "body": [
+    "Look at an ant, a fly or a beetle and you will see a body made of a row of pieces. Each piece is called a <b>segment</b>. The row has three big sections: the head at the front, the thorax in the middle, and the abdomen at the back.",
+    "Each segment gets an <b>identity</b>. Identity is an instruction that says what the segment will grow. One segment might grow an antenna, another a jaw, another a leg, and another a wing. Some grow nothing at all.",
+    "In this lab the body has 18 segments: five in the head (An, Ic, Mn, Mx, Lb), three in the thorax (T1, T2, T3) and ten in the abdomen (A1 to A10). Special genes called Hox genes decide each identity. You will meet them in the next lesson."
+   ],
+   "try": {
+    "species": "Drosophila melanogaster",
+    "edits": [
+     {
+      "gene": "Scr",
+      "op": "off",
+      "segs": [
+       "T1"
+      ]
+     }
+    ],
+    "label": "Scr off in T1"
+   },
+   "look_for": "Only T1, the first thorax segment, changes. It gets the identity of T2: its foreleg turns into a midleg, and the model also grows a wing on it. Same segment, new instruction, new body parts.",
+   "quiz": {
+    "q": "What does a segment's identity decide?",
+    "options": [
+     "How many segments the insect has",
+     "Which food the insect likes best",
+     "What body parts that segment grows",
+     "How fast the insect grows up"
+    ],
+    "answer": 2,
+    "explain": "Identity is the instruction that tells a segment what to grow, such as an antenna, a leg or a wing."
+   }
+  },
+  {
+   "id": "k2",
+   "title": "Eight genes, in order",
+   "subtitle": "The genes that set identity line up in the same order as the body they build.",
+   "picture": "genes",
+   "body": [
+    "A <b>gene</b> is a piece of DNA that holds one instruction. <b>Hox genes</b> are a small team of genes that tell each segment who it is. Insects in this lab have eight: <i>lab</i>, <i>pb</i>, <i>Dfd</i>, <i>Scr</i>, <i>Antp</i>, <i>Ubx</i>, <i>abd-A</i> and <i>Abd-B</i>.",
+    "Here is the surprise. The eight genes sit in a row on a chromosome, which is a long strand of DNA, and their order roughly matches the order of the body parts they control. <i>lab</i> works near the front of the head. <i>Abd-B</i> works at the tail end. This match is called <b>colinearity</b>.",
+    "The lab uses simplified zones for each gene. For example, <i>lab</i> works in the Ic segment of the head, <i>Dfd</i> in the jaw segments, and <i>Abd-B</i> in A8 to A10."
+   ],
+   "try": {
+    "species": "Drosophila melanogaster",
+    "edits": [
+     {
+      "gene": "Dfd",
+      "op": "ko"
+     }
+    ],
+    "label": "Dfd knockout"
+   },
+   "look_for": "Only Mn, the jaw (mandible) segment, changes. Its small jaw lobe disappears and nothing grows there. Every other segment stays the same.",
+   "quiz": {
+    "q": "What does colinearity mean for Hox genes?",
+    "options": [
+     "Gene order on the chromosome matches body order",
+     "All eight genes work in every segment",
+     "Every Hox gene makes the same protein",
+     "The genes only work in the abdomen"
+    ],
+    "answer": 0,
+    "explain": "Colinearity means the genes sit on the chromosome in roughly the same front-to-back order as the body parts they control."
+   }
+  },
+  {
+   "id": "k3",
+   "title": "The back gene usually wins",
+   "subtitle": "When two genes are on in one segment, the one nearer the tail decides.",
+   "picture": "backwins",
+   "body": [
+    "Sometimes two Hox genes are switched on in the same segment. Which one is in charge? Usually the one closer to the back. Scientists call this <b>posterior</b> prevalence, and posterior just means toward the back, or tail end.",
+    "Picture two bosses giving different orders. The boss who works further back gets obeyed. In the order of the genes, <i>Ubx</i> comes after <i>Antp</i>, so <i>Ubx</i> wins when both are on.",
+    "There are a few exceptions. In this lab, <i>Scr</i> beats <i>Antp</i> even though <i>Antp</i> sits further back. So the rule is a good guide, not a law of nature."
+   ],
+   "try": {
+    "species": "Drosophila melanogaster",
+    "edits": [
+     {
+      "gene": "Ubx",
+      "op": "on",
+      "segs": [
+       "T2"
+      ]
+     }
+    ],
+    "label": "Ubx on in T2"
+   },
+   "look_for": "Only T2 changes. <i>Antp</i> is already on there, but <i>Ubx</i> is switched on too and wins. T2 takes the identity of T3: its midleg becomes a hindleg, and its wing becomes a haltere, a small balancing knob. Turn on <b>Scientist mode</b> in the Lab to see its label: Documented.",
+   "quiz": {
+    "q": "<i>Ubx</i> and <i>Antp</i> are both on in T2. Which one decides what T2 grows?",
+    "options": [
+     "<i>Antp</i>, because it was there first",
+     "Neither one, so T2 grows nothing",
+     "Both equally, so T2 grows half a wing",
+     "<i>Ubx</i>, because it is further back"
+    ],
+    "answer": 3,
+    "explain": "The gene further back wins. <i>Ubx</i> gives T3 identity, so the wing becomes a haltere."
+   }
+  },
+  {
+   "id": "k4",
+   "title": "Turn a gene off: four wings",
+   "subtitle": "Switch off one gene and a fly grows a second pair of wings.",
+   "picture": "fourwings",
+   "body": [
+    "A <b>knockout</b> means switching a gene off to see what it was doing. Fruit flies normally have two wings. Behind them sit two tiny knobs called <b>halteres</b>, which help the fly balance in the air. Halteres grow on T3, and <i>Ubx</i> is the gene that tells T3 to make them.",
+    "Turn <i>Ubx</i> off and T3 loses its instruction. It then follows the next gene in line, <i>Antp</i>, which means T2 identity. T2 is the segment that grows wings, so the halteres become wings. The fly ends up with four. Real four-winged flies have <i>Ubx</i> switched off in T3, which is what the Lab does here.",
+    "Scientist Ed Lewis studied flies like this, called bithorax mutants, and shared the 1995 Nobel Prize for his work on how genes control body plans."
+   ],
+   "try": {
+    "species": "Drosophila melanogaster",
+    "edits": [
+     {
+      "gene": "Ubx",
+      "op": "off",
+      "segs": [
+       "T3"
+      ]
+     }
+    ],
+    "label": "Ubx off in T3"
+   },
+   "look_for": "Only T3 changes to T2: the hindleg becomes a midleg and the haltere becomes a wing. Count them: four wings. Turn on <b>Scientist mode</b> to see its label: Documented.",
+   "quiz": {
+    "q": "What happens to the halteres when <i>Ubx</i> is switched off in a fly?",
+    "options": [
+     "They disappear and leave a gap",
+     "They become a second pair of wings",
+     "They turn into antennae",
+     "They turn into jaws"
+    ],
+    "answer": 1,
+    "explain": "Without <i>Ubx</i>, T3 copies T2, so the halteres grow as wings and the fly has four."
+   }
+  },
+  {
+   "id": "k5",
+   "title": "Turn a gene on: legs on the head",
+   "subtitle": "Switch a gene on in the wrong place and an antenna becomes a leg.",
+   "picture": "headlegs",
+   "body": [
+    "The opposite of a knockout is switching a gene on where it is normally off. <i>Antp</i> works in the thorax, where the legs grow. It is normally silent in the antenna segment, called An.",
+    "Switch <i>Antp</i> on in An and that segment follows T2 identity. It grows a leg where the antenna should be. Scientists have found real fruit flies with this change. They are called Antennapedia flies.",
+    "Notice what <i>Antp</i> did not do. It did not build a leg by itself. It only told the segment which set of instructions to run, and the segment did the building."
+   ],
+   "try": {
+    "species": "Drosophila melanogaster",
+    "edits": [
+     {
+      "gene": "Antp",
+      "op": "on",
+      "segs": [
+       "An"
+      ]
+     }
+    ],
+    "label": "Antp on in An"
+   },
+   "look_for": "Only An, the antenna segment at the very front of the head, changes. It takes T2 identity, and the antenna becomes a midleg. Turn on <b>Scientist mode</b> in the Lab to see its label: Documented.",
+   "quiz": {
+    "q": "Why does <i>Antp</i> in the antenna segment make a leg?",
+    "options": [
+     "It copies finished legs from the thorax",
+     "It deletes every gene in the head",
+     "It tells the segment to run the leg program",
+     "It makes the whole head bigger"
+    ],
+    "answer": 2,
+    "explain": "Hox genes tell a segment which program to run. <i>Antp</i> gives T2 identity, so the segment builds a leg."
+   }
+  },
+  {
+   "id": "k6",
+   "title": "Same gene, different insects",
+   "subtitle": "The same change makes a different result in a beetle than in a fly.",
+   "picture": "flybeetle",
+   "body": [
+    "Insects share Hox genes, but they use them on different body parts. A fly has wings on T2 and halteres on T3. A beetle has hard wing covers called <b>elytra</b> on T2 and soft flying wings on T3.",
+    "Now switch <i>Ubx</i> off. In both insects, T3 copies T2. In the fly, a haltere becomes a wing. In the beetle, a flying wing becomes a hard cover.",
+    "So one gene change can give two different results. Each insect has its own version of T2, and T3 copies whichever version it has."
+   ],
+   "try": {
+    "species": "Tribolium castaneum",
+    "edits": [
+     {
+      "gene": "Ubx",
+      "op": "off",
+      "segs": [
+       "T3"
+      ]
+     }
+    ],
+    "label": "Beetle: Ubx off in T3"
+   },
+   "look_for": "In the beetle, only T3 changes to T2: the hindleg becomes a midleg and the flying wing becomes an elytron (a hard wing case). Now the beetle has four hard wing cases. Compare with the fly in lesson 4.",
+   "quiz": {
+    "q": "What happens to a beetle's flying wings when <i>Ubx</i> is switched off?",
+    "options": [
+     "They become hard wing covers",
+     "They turn into tiny halteres",
+     "They turn into extra antennae",
+     "They vanish and leave nothing"
+    ],
+    "answer": 0,
+    "explain": "T3 copies T2. A beetle's T2 wings are hard covers called elytra, so the flying wings become elytra."
+   }
+  },
+  {
+   "id": "k7",
+   "title": "The head's gene teams",
+   "subtitle": "In the head, genes work in pairs, and one gene can do different jobs.",
+   "picture": "headcode",
+   "body": [
+    "Head segments are not built by one gene each. They use <b>combinations</b> of Hox genes. The gene <i>pb</i> is a good example, because its job changes depending on its partner.",
+    "With <i>Dfd</i>, <i>pb</i> helps make a maxilla, a jaw part with a small feeler called a palp. With <i>Scr</i>, <i>pb</i> helps make the labium, the insect's lower lip.",
+    "Switch <i>pb</i> off and the labium loses its partner. <i>Scr</i> is left alone, and it makes a foreleg instead. Real <i>pb</i> mutants show this. The maxilla change is different. That one is the model's prediction, and no experiment in the lab's records matches it."
+   ],
+   "try": {
+    "species": "Drosophila melanogaster",
+    "edits": [
+     {
+      "gene": "pb",
+      "op": "ko"
+     }
+    ],
+    "label": "pb knockout"
+   },
+   "look_for": "Two head segments change. Lb, the labium, becomes T1: the fly's sponge-like mouth part turns into a foreleg, which real experiments show. Mx, the maxilla, becomes Mn, a jaw: the palp shrinks to a tiny lobe, which is only the model's prediction. Scientist mode shows these labels.",
+   "quiz": {
+    "q": "What does the labium grow when a fly has no <i>pb</i>?",
+    "options": [
+     "A pair of extra wings",
+     "A maxillary palp",
+     "An antenna",
+     "A foreleg"
+    ],
+    "answer": 3,
+    "explain": "Without <i>pb</i>, <i>Scr</i> works alone and gives T1 identity, so the labium becomes a foreleg. Real <i>pb</i> mutants do this."
+   }
+  },
+  {
+   "id": "k8",
+   "title": "Reading the evidence labels",
+   "subtitle": "Not every prediction is equally proven. The labels tell you how sure we are.",
+   "picture": "evidence",
+   "body": [
+    "Each change in the lab carries a label. <b>Documented</b> means a published experiment matches the gene, the change and the result. <b>Model extrapolation</b> means the lab's rules predict it, but no matching experiment is in its records. <b>Published result differs</b> means an experiment found something other than what the rules predict. In the Lab, turn on <b>Scientist mode</b> to see these labels.",
+    "A <b>model</b> is a simple copy of something real, used to make predictions. This one is simplified on purpose. Real genes work in big networks, with timing and helpers that the lab leaves out.",
+    "So treat the lab as a question generator. It suggests what to test, and experiments decide what is true."
+   ],
+   "try": {
+    "species": "Drosophila melanogaster",
+    "edits": [
+     {
+      "gene": "abdA",
+      "op": "on",
+      "segs": [
+       "T2"
+      ]
+     }
+    ],
+    "label": "abd-A on in T2"
+   },
+   "look_for": "Only T2 changes. The model says it loses its leg and its wing, because <i>abd-A</i> wins over the other genes. Turn on <b>Scientist mode</b> and the label says Published result differs: a real experiment turned the wing into a haltere instead. The simple rule misses what really happens, and the label warns you.",
+   "quiz": {
+    "q": "What does Model extrapolation tell you?",
+    "options": [
+     "A published study proved it",
+     "Experiments found a different result",
+     "It is sure to be true in real insects",
+     "The rules predict it, but no matching experiment is recorded"
+    ],
+    "answer": 3,
+    "explain": "It marks a prediction from the lab's simplified rules that has no matching experiment in its records. It is an idea to test."
+   }
+  }
+ ]
+}

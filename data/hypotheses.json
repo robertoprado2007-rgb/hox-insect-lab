@@ -1,0 +1,1011 @@
+{
+ "generated": "2026-11-18",
+ "method": "three Sonnet agents that ran about 140 simulations through the app's own model",
+ "items": [
+  {
+   "id": "abdomen-1",
+   "title": "Scr plus Ubx/abdA loss gives forelegs on beetle abdomen",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "edits": [
+    {
+     "gene": "abdA",
+     "op": "off",
+     "segs": [
+      "A2",
+      "A3"
+     ]
+    },
+    {
+     "gene": "Ubx",
+     "op": "off",
+     "segs": [
+      "A2",
+      "A3"
+     ]
+    },
+    {
+     "gene": "Scr",
+     "op": "on",
+     "segs": [
+      "A2",
+      "A3"
+     ]
+    }
+   ],
+   "predicted": "Abdominal segments A2 and A3 become T1-like and grow forelegs instead of no appendage.",
+   "novelty": "A2 and A3 AB to T1 (no appendage to foreleg) are NEW.",
+   "plausibility": "possible",
+   "reasoning": "Removing Ubx and abdA releases Dll and leaves a Hox-free or Antp-like trunk (abdA-loss-tcas-ab). Scr alone gives tarsus identity (Scr-gain-dmel-an) and is epistatic to Antp. Untested whether Scr adds T1 traits like sex-comb-like bristles to abdominal legs.",
+   "experiment": "Parental RNAi against Ubx and abd-A in Tribolium pupae combined with transgenic Scr misexpression (heat-shock or GAL4/UAS driver lines exist); score abdominal leg morphology.",
+   "caveats": "Ectopic Scr may need pb absent and cofactors; abdominal legs may stay generic T2-like rather than T1.",
+   "related_records": [
+    "abdA-loss-tcas-ab",
+    "Scr-gain-dmel-an",
+    "Ubx+abdA-loss-bmor-e"
+   ],
+   "source": "agent-abdomen.json",
+   "changes": [
+    {
+     "seg": "A2",
+     "from": "AB",
+     "to": "T1",
+     "change": "no appendage → foreleg",
+     "meaning": "First thoracic identity: forelegs, and Scr keeps wings from forming.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "A3",
+     "from": "AB",
+     "to": "T1",
+     "change": "no appendage → foreleg",
+     "meaning": "First thoracic identity: forelegs, and Scr keeps wings from forming.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "abdomen-2",
+   "title": "Abdominal proboscis-like appendages from pb gain without Hox",
+   "species": "Bombyx mori",
+   "order": "Lepidoptera",
+   "edits": [
+    {
+     "gene": "pb",
+     "op": "on",
+     "segs": [
+      "A3",
+      "A4",
+      "A5",
+      "A6"
+     ]
+    },
+    {
+     "gene": "abdA",
+     "op": "off",
+     "segs": [
+      "A3",
+      "A4",
+      "A5",
+      "A6"
+     ]
+    },
+    {
+     "gene": "Ubx",
+     "op": "off",
+     "segs": [
+      "A3",
+      "A4",
+      "A5",
+      "A6"
+     ]
+    }
+   ],
+   "predicted": "Abdominal segments A3 to A6 become maxillary-like and grow coiled proboscis instead of no appendage.",
+   "novelty": "A3-A6 AB to MX (no appendage to coiled proboscis) are NEW.",
+   "plausibility": "unlikely",
+   "reasoning": "Rule 5 lets pb outrank Antp. Ectopic pb converts legs and antennae to palps in Drosophila (pb-gain-dmel-t2) but the adult maxilla needs Dfd and head cofactors. Abdomen lacks Dll-competent cells once abdA/Ubx are gone only in part; a Lepidopteran galea is derived.",
+   "experiment": "CRISPR knock-out of Ubx and abd-A in silkworm embryos plus piggyBac GAL4/UAS pb misexpression; look for appendage morphology and Dll, Exd/Hth markers.",
+   "caveats": "Likely model artifact: rule 5 ignores need for Dfd/cofactors; proboscis is species-specific and unlikely to form from abdominal buds.",
+   "related_records": [
+    "pb-gain-dmel-t2",
+    "pb-gain-dmel-an",
+    "Ubx+abdA-loss-bmor-e"
+   ],
+   "source": "agent-abdomen.json",
+   "changes": [
+    {
+     "seg": "A3",
+     "from": "AB",
+     "to": "MX",
+     "change": "no appendage → coiled proboscis",
+     "meaning": "Maxillary identity: maxillae with feeler palps; in butterflies and moths these form the coiled proboscis.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "A4",
+     "from": "AB",
+     "to": "MX",
+     "change": "no appendage → coiled proboscis",
+     "meaning": "Maxillary identity: maxillae with feeler palps; in butterflies and moths these form the coiled proboscis.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "A5",
+     "from": "AB",
+     "to": "MX",
+     "change": "no appendage → coiled proboscis",
+     "meaning": "Maxillary identity: maxillae with feeler palps; in butterflies and moths these form the coiled proboscis.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "A6",
+     "from": "AB",
+     "to": "MX",
+     "change": "no appendage → coiled proboscis",
+     "meaning": "Maxillary identity: maxillae with feeler palps; in butterflies and moths these form the coiled proboscis.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "abdomen-3",
+   "title": "Triple Hox loss turns beetle genital segments into elytral midlegs",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "edits": [
+    {
+     "gene": "abdA",
+     "op": "ko"
+    },
+    {
+     "gene": "AbdB",
+     "op": "ko"
+    },
+    {
+     "gene": "Ubx",
+     "op": "ko"
+    }
+   ],
+   "predicted": "A8, A9 and A10 become T2-like with midlegs and elytra, extending the documented T3-A7 transformation.",
+   "novelty": "A8, A9, A10 PA to T2 (no appendage to midleg and elytron) are NEW.",
+   "plausibility": "possible",
+   "reasoning": "Drosophila BX-C deletion gives T2-like segments posteriorly (Ubx+abdA+AbdB-loss-dmel) and Abd-B loss activates Dll in genital disc (AbdB-loss-dmel-pa-genitalia). Without all three, A8-A10 should default to Antp-T2. Dorsal elytra on terminal segments is more speculative.",
+   "experiment": "Triple RNAi of Ubx, abd-A and Abd-B in Tribolium (injected pupae or embryos); cuticle prep for legs and elytra on A8-A10; Dll in situ.",
+   "caveats": "Triple RNAi may be lethal; Antp may not be expressed in terminal segments, and genital segment fusion could prevent leg outgrowth.",
+   "related_records": [
+    "Ubx+abdA+AbdB-loss-dmel",
+    "AbdB-loss-dmel-pa-genitalia",
+    "abdA-loss-tcas-ab"
+   ],
+   "source": "agent-abdomen.json",
+   "changes": [
+    {
+     "seg": "T3",
+     "from": "T3",
+     "to": "T2",
+     "change": "hindleg → midleg; hindwing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": "Ubx-loss-tcas-t3 (Tribolium castaneum)",
+     "contradicted": null
+    },
+    {
+     "seg": "A1",
+     "from": "A1",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": "Ubx-loss-bmor-a1 (Bombyx mori)",
+     "contradicted": null
+    },
+    {
+     "seg": "A2",
+     "from": "AB",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": "abdA-loss-tcas-ab (Tribolium castaneum)",
+     "contradicted": null
+    },
+    {
+     "seg": "A3",
+     "from": "AB",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": "abdA-loss-tcas-ab (Tribolium castaneum)",
+     "contradicted": null
+    },
+    {
+     "seg": "A4",
+     "from": "AB",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": "abdA-loss-tcas-ab (Tribolium castaneum)",
+     "contradicted": null
+    },
+    {
+     "seg": "A5",
+     "from": "AB",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": "abdA-loss-tcas-ab (Tribolium castaneum)",
+     "contradicted": null
+    },
+    {
+     "seg": "A6",
+     "from": "AB",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": "abdA-loss-tcas-ab (Tribolium castaneum)",
+     "contradicted": null
+    },
+    {
+     "seg": "A7",
+     "from": "AB",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": "abdA-loss-tcas-ab (Tribolium castaneum)",
+     "contradicted": null
+    },
+    {
+     "seg": "A8",
+     "from": "PA",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "A9",
+     "from": "PA",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "A10",
+     "from": "PA",
+     "to": "T2",
+     "change": "no appendage → midleg; no wing → elytron (wing case)",
+     "meaning": "Second thoracic identity: midlegs and the main pair of wings.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "abdomen-4",
+   "title": "Ubx in thorax with abdA in T2 of aphid",
+   "species": "Acyrthosiphon pisum",
+   "order": "Hemiptera",
+   "edits": [
+    {
+     "gene": "Ubx",
+     "op": "on",
+     "segs": [
+      "T1",
+      "T2"
+     ]
+    },
+    {
+     "gene": "abdA",
+     "op": "on",
+     "segs": [
+      "T2"
+     ]
+    }
+   ],
+   "predicted": "T1 becomes T3-like with hindlegs and hindwings, and T2 becomes abdominal with no legs or wings.",
+   "novelty": "T1 to T3 and T2 to AB in aphid are NEW (no gain record in Hemiptera).",
+   "plausibility": "possible",
+   "reasoning": "Heat-shock Ubx imposes T3-like identity over Antp and Scr (Ubx-gain-dmel-embryo) and abd-A misexpression represses legs and converts wing to haltere (abdA-gain-dmel-t2). Prediction follows Drosophila posterior prevalence.",
+   "experiment": "CRISPR germline or embryo microinjection of aphid transgenes with inducible promoter driving Ubx and abd-A in T1/T2; score legs, wing buds and Dll in nymphs.",
+   "caveats": "Bicyclus Ubx gain deleted limbs rather than giving T3; aphid transgenics are difficult; T1 wingless prothorax may not form hindwings. Reviewer (Opus) downgraded from likely: published ectopic abd-A in the wing gives a haltere (abdA-gain-dmel-t2), while this model predicts complete wing loss, so the analogy only partly supports the prediction. Leg loss is the better-supported part.",
+   "related_records": [
+    "Ubx-gain-dmel-embryo",
+    "abdA-gain-dmel-t2",
+    "Ubx-gain-bany-t2"
+   ],
+   "source": "agent-abdomen.json",
+   "changes": [
+    {
+     "seg": "T1",
+     "from": "T1",
+     "to": "T3",
+     "change": "foreleg → hindleg; no wing → hindwing",
+     "meaning": "Third thoracic identity: hindlegs and hindwings, which are halteres in flies.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "T2",
+     "from": "T2",
+     "to": "AB",
+     "change": "midleg → no appendage; forewing → no wing",
+     "meaning": "Abdominal identity: abd-A switches legs off.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "abdomen-5",
+   "title": "abd-A in T3 and A1 deletes haltere and leg",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "edits": [
+    {
+     "gene": "abdA",
+     "op": "on",
+     "segs": [
+      "T3",
+      "A1"
+     ]
+    }
+   ],
+   "predicted": "T3 becomes abdominal, losing its hindleg and haltere, and A1 becomes abdominal with no visible change.",
+   "novelty": "T3 to AB (hindleg and haltere lost) and A1 to AB are NEW.",
+   "plausibility": "possible",
+   "reasoning": "abd-A represses Dll and leg development when ectopic in thorax in Drosophila, and replaces Ubx in haltere (abdA-gain-dmel-t2). Abdominal identity at T3 follows posterior prevalence over Ubx. A1 change is subtle in real animals.",
+   "experiment": "Ubx-GAL4 or Ubx-enhancer driven UAS-abd-A in Drosophila, or heat-shock abd-A pulse; score adult T3 for leg and haltere loss.",
+   "caveats": "Known partial results show abd-A makes haltere-like rather than fully legless T3 in some contexts; A1 change is not visible in model. Reviewer (Opus) downgraded from likely: published ectopic abd-A in the wing gives a haltere (abdA-gain-dmel-t2), while this model predicts complete wing loss, so the analogy only partly supports the prediction. Leg loss is the better-supported part.",
+   "related_records": [
+    "abdA-gain-dmel-t2",
+    "abdA-gain-dmel-an",
+    "abdA-loss-dmel-ab"
+   ],
+   "source": "agent-abdomen.json",
+   "changes": [
+    {
+     "seg": "T3",
+     "from": "T3",
+     "to": "AB",
+     "change": "hindleg → no appendage; haltere → no wing",
+     "meaning": "Abdominal identity: abd-A switches legs off.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "A1",
+     "from": "A1",
+     "to": "AB",
+     "change": "identity shift with no visible appendage change in this model",
+     "meaning": "Abdominal identity: abd-A switches legs off.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "abdomen-6",
+   "title": "Abd-B in mid-abdomen gives genital identity",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "edits": [
+    {
+     "gene": "AbdB",
+     "op": "on",
+     "segs": [
+      "A5",
+      "A6"
+     ]
+    },
+    {
+     "gene": "abdA",
+     "op": "off",
+     "segs": [
+      "A5",
+      "A6"
+     ]
+    }
+   ],
+   "predicted": "A5 and A6 switch from abdominal to posterior-abdomen genital identity with no visible appendage change.",
+   "novelty": "A5 and A6 AB to PA are NEW.",
+   "plausibility": "possible",
+   "reasoning": "Abd-B imposes posterior identity over abdA by posterior prevalence, and gain in head gives genital-like structures (AbdB-gain-dmel-an). In the abdomen it should repress abdA and shift A5-A6 toward A8-A9 fate. Genitalia need sex-specific Dsx cofactors.",
+   "experiment": "UAS-Abd-B with abdominal driver (e.g. en-GAL4 or Ubx/abd-A enhancer GAL4) in A5/A6 in flies; check tergite pigmentation, bristles and Dll/genital markers.",
+   "caveats": "Real ectopic Abd-B mainly alters pigmentation and tergite types, not genital discs; abdA knockout is moot because AbdB already outranks it.",
+   "related_records": [
+    "AbdB-gain-dmel-an",
+    "AbdB-loss-dmel-pa",
+    "AbdB-loss-dmel-pa-genitalia"
+   ],
+   "source": "agent-abdomen.json",
+   "changes": [
+    {
+     "seg": "A5",
+     "from": "AB",
+     "to": "PA",
+     "change": "identity shift with no visible appendage change in this model",
+     "meaning": "Tail-end identity: Abd-B builds genitalia, cerci and other terminal parts.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "A6",
+     "from": "AB",
+     "to": "PA",
+     "change": "identity shift with no visible appendage change in this model",
+     "meaning": "Tail-end identity: Abd-B builds genitalia, cerci and other terminal parts.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "head-1",
+   "title": "Ubx in Aedes mouthparts: proboscis becomes hindleg",
+   "species": "Aedes aegypti",
+   "order": "Diptera",
+   "edits": [
+    {
+     "gene": "Ubx",
+     "op": "on",
+     "segs": [
+      "Mx",
+      "Lb"
+     ]
+    }
+   ],
+   "predicted": "In Aedes aegypti, ectopic Ubx turns the maxillary palp and the piercing proboscis labium into hindlegs.",
+   "novelty": "Mx: MX->T3 and Lb: LB->T3 are NEW; only the antenna (AN->T3) is documented.",
+   "plausibility": "possible",
+   "reasoning": "Ubx gain in the Drosophila antenna gives a leg-like appendage, so Ubx can reshape Dll-expressing head appendages. Gnathal cofactor context (Hth/Exd, Dfd, Scr) differs, and the mosquito labium is a derived sheath, so a clean hindleg is doubtful.",
+   "experiment": "Mosquito embryo injection of a transgene or CRISPR knock-in with a Ubx driver (e.g. heat-shock or GAL4/UAS lines in Aedes), scoring mouthpart appendages in pharate adults.",
+   "caveats": "Posterior prevalence over Scr and pb in the labium is assumed. Hindleg versus haltere-like identity is untested in head appendages.",
+   "related_records": [
+    "Ubx-gain-dmel-an",
+    "Ubx-gain-dmel-cbx",
+    "Ubx-gain-bany-t2"
+   ],
+   "source": "agent-head.json",
+   "changes": [
+    {
+     "seg": "Mx",
+     "from": "MX",
+     "to": "T3",
+     "change": "maxillary palp → hindleg",
+     "meaning": "Third thoracic identity: hindlegs and hindwings, which are halteres in flies.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "Lb",
+     "from": "LB",
+     "to": "T3",
+     "change": "piercing proboscis → hindleg",
+     "meaning": "Third thoracic identity: hindlegs and hindwings, which are halteres in flies.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "head-2",
+   "title": "Scr in Bombyx maxilla: proboscis becomes labial palps",
+   "species": "Bombyx mori",
+   "order": "Lepidoptera",
+   "edits": [
+    {
+     "gene": "Scr",
+     "op": "on",
+     "segs": [
+      "Mx"
+     ]
+    }
+   ],
+   "predicted": "In Bombyx mori, ectopic Scr in the maxilla converts the coiled proboscis into labial palps.",
+   "novelty": "Mx: MX->LB is NEW.",
+   "plausibility": "possible",
+   "reasoning": "pb plus Scr specifies labial identity in the model. Scr drives T1 or labial fate and Scr gain turns the Drosophila antenna into a leg. pb is already present in the maxilla, so a labium-like transformation is mechanistically reasonable.",
+   "experiment": "Mis-expression of Scr in the maxilla with a piggyBac GAL4/UAS system in Bombyx, or CRISPR knock-in to a maxilla enhancer. Score galea and palp morphology.",
+   "caveats": "Galea elongation may follow a different program than labial identity. Scr-pb interaction in Lepidoptera is unmapped.",
+   "related_records": [
+    "Scr-gain-dmel-an",
+    "pb-loss-dmel-lb",
+    "Scr-loss-dmel-lb"
+   ],
+   "source": "agent-head.json",
+   "changes": [
+    {
+     "seg": "Mx",
+     "from": "MX",
+     "to": "LB",
+     "change": "coiled proboscis → labial palps",
+     "meaning": "Labial identity: the lower lip and its palps; in flies the sponging pad, in true bugs the beak.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "head-3",
+   "title": "Ubx in lab-null Tribolium intercalary segment forms hindleg",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "edits": [
+    {
+     "gene": "lab",
+     "op": "ko"
+    },
+    {
+     "gene": "Ubx",
+     "op": "on",
+     "segs": [
+      "Ic"
+     ]
+    }
+   ],
+   "predicted": "In Tribolium castaneum, losing lab and expressing Ubx in the intercalary segment gives that segment a hindleg.",
+   "novelty": "Ic: IC->T3 is NEW.",
+   "plausibility": "unlikely",
+   "reasoning": "The intercalary segment makes no appendage in insects. Limb outgrowth needs a Dll-competent primordium with Hth/Exd context, and the rule assumes any segment can grow a limb. Ubx should not create an appendage where none is specified.",
+   "experiment": "Tribolium parental RNAi against lab combined with a heat-shock Ubx transgene, if available, then inspect the intercalary segment cuticle in larvae.",
+   "caveats": "The model treats IC and the trunk as equally limb-competent. Intercalary appendage vestiges are not modelled. No Ic result is documented.",
+   "related_records": [
+    "lab-loss-dmel-ic",
+    "Ubx-gain-dmel-an"
+   ],
+   "source": "agent-head.json",
+   "changes": [
+    {
+     "seg": "Ic",
+     "from": "IC",
+     "to": "T3",
+     "change": "no appendage → hindleg",
+     "meaning": "Third thoracic identity: hindlegs and hindwings, which are halteres in flies.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "head-4",
+   "title": "pb loss turns Bombyx proboscis into vestigial lobe",
+   "species": "Bombyx mori",
+   "order": "Lepidoptera",
+   "edits": [
+    {
+     "gene": "pb",
+     "op": "ko"
+    }
+   ],
+   "predicted": "In Bombyx mori, pb loss turns the coiled proboscis into a vestigial mandible-like lobe and the labial palps into forelegs.",
+   "novelty": "Mx: MX->MN is NEW; Lb: LB->T1 is documented.",
+   "plausibility": "unlikely",
+   "reasoning": "Model gives MN because Dfd remains in the maxilla and pb absent leaves Dfd to win. In Tribolium and other insects pb loss gives leg-like gnathal appendages, so leg identity, not a lobe, is likelier. Dfd should not override a pb-less ground state.",
+   "experiment": "Bombyx pb CRISPR knockout or embryonic RNAi, examining maxillary galea, palps and labium in the late embryo or larva.",
+   "caveats": "Maxilla outcome follows rule order (pb then Dfd). The pb-loss phenotype in the maxilla is variable between taxa.",
+   "related_records": [
+    "pb-loss-dmel-lb",
+    "pb-loss-tcas-lb",
+    "Dfd-loss-tcas-mn"
+   ],
+   "source": "agent-head.json",
+   "changes": [
+    {
+     "seg": "Mx",
+     "from": "MX",
+     "to": "MN",
+     "change": "coiled proboscis → vestigial lobe",
+     "meaning": "Mandibular identity: jaws (mandibles), or a tiny lobe in insects without jaws.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "Lb",
+     "from": "LB",
+     "to": "T1",
+     "change": "labial palps → foreleg",
+     "meaning": "First thoracic identity: forelegs, and Scr keeps wings from forming.",
+     "documented": "pb-loss-dmel-lb (Drosophila melanogaster)",
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "head-5",
+   "title": "Abd-B in Aedes gnathal segments deletes proboscis",
+   "species": "Aedes aegypti",
+   "order": "Diptera",
+   "edits": [
+    {
+     "gene": "AbdB",
+     "op": "on",
+     "segs": [
+      "Mn",
+      "Mx",
+      "Lb"
+     ]
+    }
+   ],
+   "predicted": "In Aedes aegypti, ectopic Abd-B in Mn, Mx and Lb switches all three to tail-end identity and removes the mandible, palp and piercing proboscis.",
+   "novelty": "Mn, Mx and Lb: all MN/MX/LB->PA are NEW; only AN->PA is documented.",
+   "plausibility": "likely",
+   "reasoning": "Abd-B is the most posterior-dominant Hox and represses Dll, so appendages disappear when it is expressed in the Drosophila antenna. The same repression should hit gnathal appendages. Mouthpart loss is plausible, though terminalia-like structures could appear instead.",
+   "experiment": "Heat-shock or GAL4/UAS Abd-B misexpression in Aedes embryos or larvae, or CRISPR knock-in at a head enhancer, then score mouthpart loss in adults.",
+   "caveats": "Real tissue may form genitalia-like parts or die. Dose and timing matter. Model only outputs no appendage.",
+   "related_records": [
+    "AbdB-gain-dmel-an",
+    "abdA-gain-dmel-an",
+    "AbdB-loss-dmel-pa-genitalia"
+   ],
+   "source": "agent-head.json",
+   "changes": [
+    {
+     "seg": "Mn",
+     "from": "MN",
+     "to": "PA",
+     "change": "vestigial lobe → no appendage",
+     "meaning": "Tail-end identity: Abd-B builds genitalia, cerci and other terminal parts.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "Mx",
+     "from": "MX",
+     "to": "PA",
+     "change": "maxillary palp → no appendage",
+     "meaning": "Tail-end identity: Abd-B builds genitalia, cerci and other terminal parts.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "Lb",
+     "from": "LB",
+     "to": "PA",
+     "change": "piercing proboscis → no appendage",
+     "meaning": "Tail-end identity: Abd-B builds genitalia, cerci and other terminal parts.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "head-6",
+   "title": "Scr loss plus pb in T1: Aedes foreleg becomes palp",
+   "species": "Aedes aegypti",
+   "order": "Diptera",
+   "edits": [
+    {
+     "gene": "Scr",
+     "op": "ko"
+    },
+    {
+     "gene": "pb",
+     "op": "on",
+     "segs": [
+      "T1"
+     ]
+    }
+   ],
+   "predicted": "In Aedes aegypti, Scr loss with pb expressed in T1 turns the labium into a maxillary palp and the foreleg into a maxillary palp.",
+   "novelty": "T1: T1->MX is NEW; Lb: LB->MX is documented.",
+   "plausibility": "possible",
+   "reasoning": "Ectopic pb makes legs into palps in Drosophila T2, and pb-gain effect in T1 is blocked where Scr is present. Removing Scr should free pb to act in T1, as in the model. The two edits are consistent with known Scr-pb antagonism.",
+   "experiment": "Aedes Scr CRISPR or RNAi combined with a pb heat-shock or GAL4/UAS transgene, then score the prothoracic leg and labium.",
+   "caveats": "Needs Scr removal in T1 specifically, which also gives T1 toward T2 in other taxa. Tools in Aedes are limited.",
+   "related_records": [
+    "pb-gain-dmel-t2",
+    "Scr-loss-dmel-lb",
+    "Scr-loss-dmel-t1"
+   ],
+   "source": "agent-head.json",
+   "changes": [
+    {
+     "seg": "Lb",
+     "from": "LB",
+     "to": "MX",
+     "change": "piercing proboscis → maxillary palp",
+     "meaning": "Maxillary identity: maxillae with feeler palps; in butterflies and moths these form the coiled proboscis.",
+     "documented": "Scr-loss-dmel-lb (Drosophila melanogaster)",
+     "contradicted": null
+    },
+    {
+     "seg": "T1",
+     "from": "T1",
+     "to": "MX",
+     "change": "foreleg → maxillary palp",
+     "meaning": "Maxillary identity: maxillae with feeler palps; in butterflies and moths these form the coiled proboscis.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "thorax-1",
+   "title": "Scr gain in Tribolium T2 deletes elytra",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "edits": [
+    {
+     "gene": "Scr",
+     "op": "on",
+     "segs": [
+      "T2",
+      "T3"
+     ]
+    }
+   ],
+   "predicted": "Scr switched on in T2 and T3 turns the T2 midleg into a foreleg and removes the elytron; T3 is unchanged.",
+   "novelty": "T2 midleg to foreleg and elytron to no wing (NEW); T3 unchanged because Ubx outranks Scr.",
+   "plausibility": "possible",
+   "reasoning": "Scr represses wing fate in T1; Tribolium Scr RNAi gives wing-like T1 outgrowths, so the reverse (Scr in T2 suppressing elytra) is mechanistically reasonable. Foreleg-like T2 legs resemble ectopic Scr sex-comb results in flies. Ubx dominance in T3 is plausible.",
+   "experiment": "Express Scr in T2 and T3 with a piggyBac heat-shock or GAL4/UAS transgene in Tribolium; score T2 leg and elytron.",
+   "caveats": "Ectopic Scr may only make partial T1-like leg features while elytron reduction could be incomplete.",
+   "related_records": [
+    "Scr-loss-dmel-t1",
+    "Scr-loss-ofas-t1",
+    "Scr-gain-dmel-an"
+   ],
+   "source": "agent-thorax.json",
+   "changes": [
+    {
+     "seg": "T2",
+     "from": "T2",
+     "to": "T1",
+     "change": "midleg → foreleg; elytron (wing case) → no wing",
+     "meaning": "First thoracic identity: forelegs, and Scr keeps wings from forming.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "thorax-2",
+   "title": "AbdB in Bombyx thorax deletes legs and wings",
+   "species": "Bombyx mori",
+   "order": "Lepidoptera",
+   "edits": [
+    {
+     "gene": "AbdB",
+     "op": "on",
+     "segs": [
+      "T2",
+      "T3"
+     ]
+    }
+   ],
+   "predicted": "AbdB switched on in T2 and T3 gives posterior-abdomen identity with no legs and no fore- or hindwings.",
+   "novelty": "T2 and T3 both to PA: legs and both wing pairs lost (all NEW).",
+   "plausibility": "possible",
+   "reasoning": "Posterior Hox genes repress Distal-less and limb outgrowth in abdomen; ectopic Abd-B in fly head and thorax gives posterior identity (AbdB-gain-dmel-an). Wing suppression by high Abd-B is plausible. Lepidopteran wing disc response is untested.",
+   "experiment": "CRISPR knock-in of a heat-shock or GAL4/UAS AbdB in Bombyx (both tools exist) and score thoracic legs and wing discs.",
+   "caveats": "Real result may be partial reduction rather than full PA identity; Bombyx PA terminalia are not modelled in thorax.",
+   "related_records": [
+    "AbdB-gain-dmel-an",
+    "abdA-gain-dmel-t2",
+    "Ubx-gain-bany-t2"
+   ],
+   "source": "agent-thorax.json",
+   "changes": [
+    {
+     "seg": "T2",
+     "from": "T2",
+     "to": "PA",
+     "change": "midleg → no appendage; forewing → no wing",
+     "meaning": "Tail-end identity: Abd-B builds genitalia, cerci and other terminal parts.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "T3",
+     "from": "T3",
+     "to": "PA",
+     "change": "hindleg → no appendage; hindwing → no wing",
+     "meaning": "Tail-end identity: Abd-B builds genitalia, cerci and other terminal parts.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "thorax-3",
+   "title": "Scr loss plus Ubx gain: haltere on fly prothorax",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "edits": [
+    {
+     "gene": "Scr",
+     "op": "ko"
+    },
+    {
+     "gene": "Ubx",
+     "op": "on",
+     "segs": [
+      "T1"
+     ]
+    }
+   ],
+   "predicted": "With Scr lost and Ubx on in T1, the prothoracic foreleg becomes a hindleg and a haltere appears; the labium also goes to maxillary palp.",
+   "novelty": "T1 foreleg to hindleg and no wing to haltere (NEW); Lb to MX is documented.",
+   "plausibility": "possible",
+   "reasoning": "Without Scr, T1 can make dorsal wing-like outgrowths (Tribolium, Oncopeltus), so Ubx could convert them to haltere. Ubx gain in T1 giving T3-like legs is plausible. Fly T1 normally lacks a wing primordium, so the dorsal change is untested.",
+   "experiment": "GAL4/UAS-Ubx driven in T1 disc (Scr-GAL4 or Dfd-GAL4) in a Scr-RNAi or Scr hypomorph background; score leg and dorsal prothorax.",
+   "caveats": "Scr loss in flies gives T1 to T2 leg traits, not wing; haltere on T1 may not form without wing primordium.",
+   "related_records": [
+    "Scr-loss-dmel-t1",
+    "Scr-loss-dmel-lb",
+    "Ubx-gain-dmel-cbx"
+   ],
+   "source": "agent-thorax.json",
+   "changes": [
+    {
+     "seg": "Lb",
+     "from": "LB",
+     "to": "MX",
+     "change": "sponging labellum → maxillary palp",
+     "meaning": "Maxillary identity: maxillae with feeler palps; in butterflies and moths these form the coiled proboscis.",
+     "documented": "Scr-loss-dmel-lb (Drosophila melanogaster)",
+     "contradicted": null
+    },
+    {
+     "seg": "T1",
+     "from": "T1",
+     "to": "T3",
+     "change": "foreleg → hindleg; no wing → haltere",
+     "meaning": "Third thoracic identity: hindlegs and hindwings, which are halteres in flies.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "thorax-4",
+   "title": "Ubx+Antp loss gives three elytra pairs",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "edits": [
+    {
+     "gene": "Ubx",
+     "op": "ko"
+    },
+    {
+     "gene": "Antp",
+     "op": "ko"
+    }
+   ],
+   "predicted": "Losing Ubx and Antp turns T2, T3 and A1 into Hox-free ground state with antenna-like legs, and T3 and A1 gain elytra.",
+   "novelty": "T3 and A1 to GROUND: hindleg to antenna, hindwing to elytron, and A1 gets antennae and elytra (NEW).",
+   "plausibility": "possible",
+   "reasoning": "Tribolium Antp loss gives antennal legs and Ubx loss gives T3 to T2, so combined loss reaching a Hox-free trunk matches the multi-gene ground-state record. Elytra at A1 and T3 follow Ubx-null forewing transformation. Antp may also be needed for wings, so elytra could fail.",
+   "experiment": "Parental RNAi against Tc-Antp and Tc-Ubx together (or CRISPR mutants) in Tribolium; score appendages and dorsal outgrowths from T2 to A1.",
+   "caveats": "Antp is needed for wing identity in many insects, so the ground-state wing may not form; abdA still acts on A2 onward.",
+   "related_records": [
+    "Antp-loss-tcas-t2",
+    "Ubx-loss-tcas-t3",
+    "Dfd+Scr+Antp+Ubx+abdA-loss-tcas"
+   ],
+   "source": "agent-thorax.json",
+   "changes": [
+    {
+     "seg": "T2",
+     "from": "T2",
+     "to": "GROUND",
+     "change": "midleg → antenna",
+     "meaning": "Hox-free ground state: with no Hox instruction the limb becomes antenna-like and, on the thorax or abdomen, a wing can form (the wing part is extrapolated).",
+     "documented": "Antp-loss-tcas-t2 (Tribolium castaneum)",
+     "contradicted": null
+    },
+    {
+     "seg": "T3",
+     "from": "T3",
+     "to": "GROUND",
+     "change": "hindleg → antenna; hindwing → elytron (wing case)",
+     "meaning": "Hox-free ground state: with no Hox instruction the limb becomes antenna-like and, on the thorax or abdomen, a wing can form (the wing part is extrapolated).",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "A1",
+     "from": "A1",
+     "to": "GROUND",
+     "change": "no appendage → antenna; no wing → elytron (wing case)",
+     "meaning": "Hox-free ground state: with no Hox instruction the limb becomes antenna-like and, on the thorax or abdomen, a wing can form (the wing part is extrapolated).",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "thorax-5",
+   "title": "Ubx gain in locust T1-T2: hindlegs, hindwings",
+   "species": "Schistocerca cancellata",
+   "order": "Orthoptera",
+   "edits": [
+    {
+     "gene": "Ubx",
+     "op": "on",
+     "segs": [
+      "T1",
+      "T2"
+     ]
+    }
+   ],
+   "predicted": "Ubx on in T1 and T2 makes both segments jumping hindlegs; T2 tegmina become fan-folded hindwings and T1 gains hindwings.",
+   "novelty": "T1 foreleg to jumping hindleg and no wing to fan-folded hindwing (NEW); T2 change is documented.",
+   "plausibility": "unlikely",
+   "reasoning": "Hindleg conversion in T1 is plausible, but T1 has no wing primordium and wings need Antp-dependent wing disc fate. Pronotum dorsal tissue is not wing-competent. Rule that fails: ectopic wing from any trunk segment lacking Hox-free dorsal state.",
+   "experiment": "RNAi cannot test gain; use CRISPR knock-in or electroporated Ubx expression in Schistocerca embryos and score T1 legs and pronotum.",
+   "caveats": "Wing at T1 likely artifact; only leg change is credible. Locust transgenesis is difficult.",
+   "related_records": [
+    "Ubx-gain-dmel-cbx",
+    "Ubx-gain-dmel-an",
+    "Ubx-loss-adom-t3"
+   ],
+   "source": "agent-thorax.json",
+   "changes": [
+    {
+     "seg": "T1",
+     "from": "T1",
+     "to": "T3",
+     "change": "foreleg → jumping hindleg; no wing → fan-folded hindwing",
+     "meaning": "Third thoracic identity: hindlegs and hindwings, which are halteres in flies.",
+     "documented": null,
+     "contradicted": null
+    },
+    {
+     "seg": "T2",
+     "from": "T2",
+     "to": "T3",
+     "change": "midleg → jumping hindleg; tegmen (leathery forewing) → fan-folded hindwing",
+     "meaning": "Third thoracic identity: hindlegs and hindwings, which are halteres in flies.",
+     "documented": "Ubx-gain-dmel-cbx (Drosophila melanogaster)",
+     "contradicted": null
+    }
+   ]
+  },
+  {
+   "id": "thorax-6",
+   "title": "abdA gain in honeybee T3 deletes hindleg and hindwing",
+   "species": "Apis mellifera",
+   "order": "Hymenoptera",
+   "edits": [
+    {
+     "gene": "abdA",
+     "op": "on",
+     "segs": [
+      "T3"
+     ]
+    }
+   ],
+   "predicted": "abdA on in T3 gives abdominal identity with no hindleg and no hindwing.",
+   "novelty": "T3 to AB: hindleg and hindwing lost (NEW).",
+   "plausibility": "unlikely",
+   "reasoning": "In flies ectopic abd-A turns T2 to T3-like haltere (abdA-gain-dmel-t2), not a full leg-and-wing loss, since abd-A acts at appendage level. Rule 2 (abdA gives AB) likely over-applies thoracically. Leg loss still plausible via Dll repression.",
+   "experiment": "Heat-shock or CRISPR knock-in abdA in honeybee is hard; test first in Tribolium with GAL4/UAS or injection of mRNA, scoring T3 legs and hindwing.",
+   "caveats": "Honeybee transgenics are limited; the Drosophila record points to haltere-like, not abdominal, outcome.",
+   "related_records": [
+    "abdA-gain-dmel-t2",
+    "abdA-gain-dmel-an",
+    "Ubx-gain-dmel-cbx"
+   ],
+   "source": "agent-thorax.json",
+   "changes": [
+    {
+     "seg": "T3",
+     "from": "T3",
+     "to": "AB",
+     "change": "hindleg → no appendage; hindwing → no wing",
+     "meaning": "Abdominal identity: abd-A switches legs off.",
+     "documented": null,
+     "contradicted": null
+    }
+   ]
+  }
+ ]
+}

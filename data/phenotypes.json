@@ -1,0 +1,882 @@
+{
+ "records": [
+  {
+   "id": "lab-loss-dmel-ic",
+   "gene": "lab",
+   "manipulation": "loss",
+   "from": "IC",
+   "to": "DELETED",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "embryo",
+   "summary": "lab mutants fail head involution and lose head structures (salivary glands, parts of cephalopharyngeal skeleton). Adult clones: maxillary palp and vibrissa region deleted, posterior dorsal head toward thoracic-like.",
+   "citation": {
+    "authors": "Merrill VKL et al.",
+    "year": 1989,
+    "title": "A genetic and developmental analysis of mutations in labial, a gene necessary for proper head formation in Drosophila melanogaster",
+    "journal": "Developmental Biology",
+    "doi": "10.1016/0012-1606(89)90187-5",
+    "pmid": "2570723"
+   },
+   "verified": true
+  },
+  {
+   "id": "pb-loss-dmel-lb",
+   "gene": "pb",
+   "manipulation": "loss",
+   "from": "LB",
+   "to": "T1",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "pb null alleles transform adult labial mouthparts (proboscis) into prothoracic legs; maxillary palp morphology also affected. No embryonic phenotype.",
+   "citation": {
+    "authors": "Pultz MA et al.",
+    "year": 1988,
+    "title": "The proboscipedia locus of the Antennapedia complex: a molecular and genetic analysis.",
+    "journal": "Genes & Development",
+    "doi": "10.1101/gad.2.7.901",
+    "pmid": "2850265"
+   },
+   "verified": true
+  },
+  {
+   "id": "pb-loss-tcas-lb",
+   "gene": "pb",
+   "manipulation": "loss",
+   "from": "LB",
+   "to": "T1",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "stage": "adult",
+   "summary": "Null maxillopedia (= pb) mutants transform labial palps to legs, a phenotype similar to Drosophila pb.",
+   "citation": {
+    "authors": "Shippy TD, Brown SJ, Denell RE",
+    "year": 2000,
+    "title": "maxillopedia is the Tribolium ortholog of proboscipedia",
+    "journal": "Evolution & Development",
+    "doi": "10.1046/j.1525-142x.2000.00055.x",
+    "pmid": "11252570"
+   },
+   "verified": true
+  },
+  {
+   "id": "pb-loss-ofas-lb",
+   "gene": "pb",
+   "manipulation": "loss",
+   "from": "LB",
+   "to": "T1",
+   "species": "Oncopeltus fasciatus",
+   "order": "Hemiptera",
+   "stage": "nymph",
+   "summary": "pb RNAi in the milkweed bug: labium specified by pb plus Scr; labial appendages become legs (direction as summarised by DeCamillis et al. 2001, Genetics 159:1643).",
+   "citation": {
+    "authors": "Hughes CL, Kaufman TC",
+    "year": 2000,
+    "title": "RNAi analysis of Deformed, proboscipedia and Sex combs reduced in the milkweed bug Oncopeltus fasciatus: novel roles for Hox genes in the Hemipteran head",
+    "journal": "Development",
+    "doi": "10.1242/dev.127.17.3683",
+    "pmid": "10934013"
+   },
+   "verified": true
+  },
+  {
+   "id": "pb-gain-dmel-t2",
+   "gene": "pb",
+   "manipulation": "gain",
+   "from": "T2",
+   "to": "MX",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "GAL4-driven ectopic pb in leg discs converts legs of all three thoracic pairs into maxillary or labial palps.",
+   "citation": {
+    "authors": "Aplin AC, Kaufman TC",
+    "year": 1997,
+    "title": "Homeotic transformation of legs to mouthparts by proboscipedia expression in Drosophila imaginal discs",
+    "journal": "Mechanisms of Development",
+    "doi": "10.1016/s0925-4773(96)00649-1",
+    "pmid": "9106166"
+   },
+   "verified": true
+  },
+  {
+   "id": "pb-gain-dmel-an",
+   "gene": "pb",
+   "manipulation": "gain",
+   "from": "AN",
+   "to": "MX",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Combinatorial code: no PB/SCR gives antenna, PB alone gives maxillary palp, SCR alone gives tarsus, both give proboscis. Antenna-to-palp is inferred from this code, not a stated transformation.",
+   "citation": {
+    "authors": "Percival-Smith A et al.",
+    "year": 1997,
+    "title": "Genetic characterization of the role of the two HOX proteins, Proboscipedia and Sex Combs Reduced, in determination of adult antennal, tarsal, maxillary palp and proboscis identities in Drosophila melanogaster",
+    "journal": "Development",
+    "doi": "10.1242/dev.124.24.5049",
+    "pmid": "9362475"
+   },
+   "verified": true
+  },
+  {
+   "id": "pb+Scr-loss-dmel-lb",
+   "gene": "pb+Scr",
+   "manipulation": "loss",
+   "from": "LB",
+   "to": "GROUND",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Removing PB and SCR together transforms the proboscis into antenna.",
+   "citation": {
+    "authors": "Percival-Smith A et al.",
+    "year": 1997,
+    "title": "Genetic characterization of the role of the two HOX proteins, Proboscipedia and Sex Combs Reduced, in determination of adult antennal, tarsal, maxillary palp and proboscis identities in Drosophila melanogaster",
+    "journal": "Development",
+    "doi": "10.1242/dev.124.24.5049",
+    "pmid": "9362475"
+   },
+   "verified": true
+  },
+  {
+   "id": "Dfd-loss-dmel-mn-embryo",
+   "gene": "Dfd",
+   "manipulation": "loss",
+   "from": "MN",
+   "to": "DELETED",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "embryo",
+   "summary": "Null Dfd embryos lose pattern elements from mandibular and maxillary segments; one larval head-skeleton element is duplicated. Deletion, not clear homeotic transformation.",
+   "citation": {
+    "authors": "Regulski M et al.",
+    "year": 1987,
+    "title": "Developmental and molecular analysis of Deformed; a homeotic gene controlling Drosophila head development",
+    "journal": "The EMBO Journal",
+    "doi": "10.1002/j.1460-2075.1987.tb04819.x",
+    "pmid": "16453752"
+   },
+   "verified": true
+  },
+  {
+   "id": "Dfd-loss-dmel-mn-adult",
+   "gene": "Dfd",
+   "manipulation": "loss",
+   "from": "MN",
+   "to": "DELETED",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Dfd mutant adults: ventral head structures deleted; dorsal posterior head transformed toward thoracic-like tissue.",
+   "citation": {
+    "authors": "Merrill VKL, Turner FR, Kaufman TC",
+    "year": 1987,
+    "title": "A genetic and developmental analysis of mutations in the Deformed locus in Drosophila melanogaster",
+    "journal": "Developmental Biology",
+    "doi": "10.1016/0012-1606(87)90303-4",
+    "pmid": "3109984"
+   },
+   "verified": true
+  },
+  {
+   "id": "Dfd-loss-tcas-mn",
+   "gene": "Dfd",
+   "manipulation": "loss",
+   "from": "MN",
+   "to": "GROUND",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "stage": "larva",
+   "summary": "Tribolium Dfd null larvae: mandibular appendages transformed to antennae; maxillary appendages keep telopodite but lose endite.",
+   "citation": {
+    "authors": "Brown S et al.",
+    "year": 2000,
+    "title": "Implications of the Tribolium Deformed mutant phenotype for the evolution of Hox gene function",
+    "journal": "Proceedings of the National Academy of Sciences",
+    "doi": "10.1073/pnas.97.9.4510",
+    "pmid": "10781053"
+   },
+   "verified": true
+  },
+  {
+   "id": "Dfd-gain-dmel-t1",
+   "gene": "Dfd",
+   "manipulation": "gain",
+   "from": "T1",
+   "to": "MN",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "embryo",
+   "summary": "Heat-shock Dfd drives other segments toward head (mandibular/maxillary) identity; needs early and persistent expression. Target segment identity is approximate.",
+   "citation": {
+    "authors": "Kuziora MA, McGinnis W",
+    "year": 1988,
+    "title": "Autoregulation of a drosophila homeotic selector gene",
+    "journal": "Cell",
+    "doi": "10.1016/0092-8674(88)90034-7",
+    "pmid": "2902926"
+   },
+   "verified": true
+  },
+  {
+   "id": "Scr-loss-dmel-t1",
+   "gene": "Scr",
+   "manipulation": "loss",
+   "from": "T1",
+   "to": "T2",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Scr- clones: prothorax develops like mesothorax.",
+   "citation": {
+    "authors": "Struhl G",
+    "year": 1982,
+    "title": "Genes controlling segmental specification in the Drosophila thorax.",
+    "journal": "Proceedings of the National Academy of Sciences",
+    "doi": "10.1073/pnas.79.23.7380",
+    "pmid": "6961417"
+   },
+   "verified": true
+  },
+  {
+   "id": "Scr-loss-ofas-t1",
+   "gene": "Scr",
+   "manipulation": "loss",
+   "from": "T1",
+   "to": "T2",
+   "species": "Oncopeltus fasciatus",
+   "order": "Hemiptera",
+   "stage": "nymph",
+   "summary": "Scr RNAi in late nymphs: posterior prothorax toward T2-like identity; prolonged depletion across two stages produces ectopic wings on T1; T1 legs unaffected.",
+   "citation": {
+    "authors": "Chesebro J et al.",
+    "year": 2009,
+    "title": "Diverging functions of Scr between embryonic and post-embryonic development in a hemimetabolous insect, Oncopeltus fasciatus",
+    "journal": "Developmental Biology",
+    "doi": "10.1016/j.ydbio.2009.01.032",
+    "pmid": "19382295"
+   },
+   "verified": true
+  },
+  {
+   "id": "Scr-loss-pame-t1",
+   "gene": "Scr",
+   "manipulation": "loss",
+   "from": "T1",
+   "to": "T2",
+   "species": "Periplaneta americana",
+   "order": "Blattodea",
+   "stage": "nymph",
+   "summary": "Scr RNAi cockroach: T1 identity lost post-embryonically; strongest nymphs grow ectopic wing-like tissue from the posterior prothorax.",
+   "citation": {
+    "authors": "Hrycaj S, Chesebro J, Popadić A",
+    "year": 2010,
+    "title": "Functional analysis of Scr during embryonic and post-embryonic development in the cockroach, Periplaneta americana",
+    "journal": "Developmental Biology",
+    "doi": "10.1016/j.ydbio.2010.02.018",
+    "pmid": "20171962"
+   },
+   "verified": true
+  },
+  {
+   "id": "Scr-loss-tcas-lb",
+   "gene": "Scr",
+   "manipulation": "loss",
+   "from": "LB",
+   "to": "GROUND",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "stage": "larva",
+   "summary": "Cephalothorax (Scr) mutants and Scr RNAi: labial palps transformed into antennae; head and T1 fused.",
+   "citation": {
+    "authors": "Curtis CD et al.",
+    "year": 2001,
+    "title": "Molecular characterization of Cephalothorax, the Tribolium ortholog of Sex combs reduced",
+    "journal": "genesis",
+    "doi": "10.1002/gene.1027",
+    "pmid": "11353513"
+   },
+   "verified": true
+  },
+  {
+   "id": "Scr-loss-dmel-lb",
+   "gene": "Scr",
+   "manipulation": "loss",
+   "from": "LB",
+   "to": "MX",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "PB alone specifies maxillary palp identity, so proboscis lacking SCR is expected to become palp-like. Inferred from combinatorial genetics.",
+   "citation": {
+    "authors": "Percival-Smith A et al.",
+    "year": 1997,
+    "title": "Genetic characterization of the role of the two HOX proteins, Proboscipedia and Sex Combs Reduced, in determination of adult antennal, tarsal, maxillary palp and proboscis identities in Drosophila melanogaster",
+    "journal": "Development",
+    "doi": "10.1242/dev.124.24.5049",
+    "pmid": "9362475"
+   },
+   "verified": true
+  },
+  {
+   "id": "Scr-gain-dmel-an",
+   "gene": "Scr",
+   "manipulation": "gain",
+   "from": "AN",
+   "to": "T1",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "SCR alone specifies tarsus identity (PB absent). Antenna-to-tarsus inferred from the combinatorial code.",
+   "citation": {
+    "authors": "Percival-Smith A et al.",
+    "year": 1997,
+    "title": "Genetic characterization of the role of the two HOX proteins, Proboscipedia and Sex Combs Reduced, in determination of adult antennal, tarsal, maxillary palp and proboscis identities in Drosophila melanogaster",
+    "journal": "Development",
+    "doi": "10.1242/dev.124.24.5049",
+    "pmid": "9362475"
+   },
+   "verified": true
+  },
+  {
+   "id": "Antp-gain-dmel-an",
+   "gene": "Antp",
+   "manipulation": "gain",
+   "from": "AN",
+   "to": "T2",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Heat-shock Antp at larval stages transforms antennae into second legs; dorsal head can form T2 scutum.",
+   "citation": {
+    "authors": "Schneuwly S, Klemenz R, Gehring WJ",
+    "year": 1987,
+    "title": "Redesigning the body plan of Drosophila by ectopic expression of the homoeotic gene Antennapedia",
+    "journal": "Nature",
+    "doi": "10.1038/325816a0",
+    "pmid": "3821869"
+   },
+   "verified": true
+  },
+  {
+   "id": "Antp-loss-dmel-t2",
+   "gene": "Antp",
+   "manipulation": "loss",
+   "from": "T2",
+   "to": "GROUND",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Antp- clones: parts of mesothorax transformed to antenna; with Scr or Ubx also absent, prothorax and metathorax also go antennal.",
+   "citation": {
+    "authors": "Struhl G",
+    "year": 1982,
+    "title": "Genes controlling segmental specification in the Drosophila thorax.",
+    "journal": "Proceedings of the National Academy of Sciences",
+    "doi": "10.1073/pnas.79.23.7380",
+    "pmid": "6961417"
+   },
+   "verified": true
+  },
+  {
+   "id": "Antp-loss-dmel-leg",
+   "gene": "Antp",
+   "manipulation": "loss",
+   "from": "T2",
+   "to": "GROUND",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Homeotic mutation transforming leg to antenna (phenotype taken from title; abstract not available in PubMed).",
+   "citation": {
+    "authors": "Struhl G",
+    "year": 1981,
+    "title": "A homoeotic mutation transforming leg to antenna in Drosophila",
+    "journal": "Nature",
+    "doi": "10.1038/292635a0",
+    "pmid": "7254358"
+   },
+   "verified": true
+  },
+  {
+   "id": "Antp-loss-tcas-t2",
+   "gene": "Antp",
+   "manipulation": "loss",
+   "from": "T2",
+   "to": "GROUND",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "stage": "larva",
+   "summary": "Mutations in the Tribolium Antp ortholog transform thoracic appendages to antennae (reported in Brown et al. 2000, summarising earlier genetics).",
+   "citation": {
+    "authors": "Brown S et al.",
+    "year": 2000,
+    "title": "Implications of the Tribolium Deformed mutant phenotype for the evolution of Hox gene function",
+    "journal": "Proceedings of the National Academy of Sciences",
+    "doi": "10.1073/pnas.97.9.4510",
+    "pmid": "10781053"
+   },
+   "verified": true
+  },
+  {
+   "id": "Antp-loss-bmor-t1",
+   "gene": "Antp",
+   "manipulation": "loss",
+   "from": "T1",
+   "to": "GROUND",
+   "species": "Bombyx mori",
+   "order": "Lepidoptera",
+   "stage": "embryo",
+   "summary": "Nc mutant lacks the Antp homeobox: prothoracic legs transformed into antennae, mesothoracic legs milder; embryos die at stage 26.",
+   "citation": {
+    "authors": "Nagata T et al.",
+    "year": 1996,
+    "title": "Developmental expression of the Bombyx Antennapedia homologue and homeotic changes in the Nc mutant",
+    "journal": "Genes to Cells",
+    "doi": "10.1046/j.1365-2443.1996.d01-260.x",
+    "pmid": "9078385"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-loss-dmel-t3",
+   "gene": "Ubx",
+   "manipulation": "loss",
+   "from": "T3",
+   "to": "T2",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Halteres transformed to wings: four-winged fly (bx3 pbx / abx bx3 pbx). Metathorax becomes mesothorax-like.",
+   "citation": {
+    "authors": "Lewis EB",
+    "year": 1978,
+    "title": "A gene complex controlling segmentation in Drosophila",
+    "journal": "Nature",
+    "doi": "10.1038/276565a0",
+    "pmid": "103000"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-loss-dmel-t3-clones",
+   "gene": "Ubx",
+   "manipulation": "loss",
+   "from": "T3",
+   "to": "T2",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Ubx- clones: metathorax develops like mesothorax.",
+   "citation": {
+    "authors": "Struhl G",
+    "year": 1982,
+    "title": "Genes controlling segmental specification in the Drosophila thorax.",
+    "journal": "Proceedings of the National Academy of Sciences",
+    "doi": "10.1073/pnas.79.23.7380",
+    "pmid": "6961417"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-loss-tcas-t3",
+   "gene": "Ubx",
+   "manipulation": "loss",
+   "from": "T3",
+   "to": "T2",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "stage": "adult",
+   "summary": "Ubx RNAi: membranous hindwings transformed to elytra (forewing identity); elytra reflect a Hox-free state.",
+   "citation": {
+    "authors": "Tomoyasu Y, Wheeler SR, Denell RE",
+    "year": 2005,
+    "title": "Ultrabithorax is required for membranous wing identity in the beetle Tribolium castaneum",
+    "journal": "Nature",
+    "doi": "10.1038/nature03272",
+    "pmid": "15703749"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-loss-lepid-t3",
+   "gene": "Ubx",
+   "manipulation": "loss",
+   "from": "T3",
+   "to": "T2",
+   "species": "Junonia coenia, Vanessa cardui, Plodia interpunctella",
+   "order": "Lepidoptera",
+   "stage": "adult",
+   "summary": "CRISPR Ubx mosaic clones: hindwing-to-forewing transformation of scales, colour pattern and venation.",
+   "citation": {
+    "authors": "Tendolkar A et al.",
+    "year": 2021,
+    "title": "Ultrabithorax Is a Micromanager of Hindwing Identity in Butterflies and Moths",
+    "journal": "Frontiers in Ecology and Evolution",
+    "doi": "10.3389/fevo.2021.643661"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-loss-ofas-t3",
+   "gene": "Ubx",
+   "manipulation": "loss",
+   "from": "T3",
+   "to": "T2",
+   "species": "Oncopeltus fasciatus",
+   "order": "Hemiptera",
+   "stage": "nymph",
+   "summary": "Ubx RNAi shortens the enlarged T3 tibia (growth effect, partial shift toward T2 proportions rather than full identity switch).",
+   "citation": {
+    "authors": "Mahfooz N et al.",
+    "year": 2007,
+    "title": "Ubx Regulates Differential Enlargement and Diversification of Insect Hind Legs",
+    "journal": "PLoS ONE",
+    "doi": "10.1371/journal.pone.0000866",
+    "pmid": "17848997"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-loss-adom-t3",
+   "gene": "Ubx",
+   "manipulation": "loss",
+   "from": "T3",
+   "to": "T2",
+   "species": "Acheta domesticus",
+   "order": "Orthoptera",
+   "stage": "nymph",
+   "summary": "Ubx RNAi shortens enlarged T3 femur, tibia and tarsus of the cricket hind leg (partial, growth-level change toward T2 proportions).",
+   "citation": {
+    "authors": "Mahfooz N et al.",
+    "year": 2007,
+    "title": "Ubx Regulates Differential Enlargement and Diversification of Insect Hind Legs",
+    "journal": "PLoS ONE",
+    "doi": "10.1371/journal.pone.0000866",
+    "pmid": "17848997"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-loss-bmor-a1",
+   "gene": "Ubx",
+   "manipulation": "loss",
+   "from": "A1",
+   "to": "T2",
+   "species": "Bombyx mori",
+   "order": "Lepidoptera",
+   "stage": "larva",
+   "summary": "Embryonic Ubx RNAi: extra pair of thoracic leg-like protuberances on A1; other abdominal segments unchanged.",
+   "citation": {
+    "authors": "Masumoto M, Yaginuma T, Niimi T",
+    "year": 2009,
+    "title": "Functional analysis of Ultrabithorax in the silkworm, Bombyx mori, using RNAi",
+    "journal": "Development Genes and Evolution",
+    "doi": "10.1007/s00427-009-0305-9",
+    "pmid": "19908062"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-loss-pliu-a1",
+   "gene": "Ubx",
+   "manipulation": "loss",
+   "from": "A1",
+   "to": "T3",
+   "species": "Panorpa liui",
+   "order": "Mecoptera",
+   "stage": "embryo",
+   "summary": "Parental Ubx RNAi transforms A1 into T3 identity (proleg segment) and alters Dll distribution.",
+   "citation": {
+    "authors": "Liu B, Hua B",
+    "year": 2023,
+    "title": "Distinct roles of the Hox genes Ultrabithorax and abdominal‐A in scorpionfly embryonic proleg development",
+    "journal": "Insect Molecular Biology",
+    "doi": "10.1111/imb.12878",
+    "pmid": "37792400"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-gain-dmel-cbx",
+   "gene": "Ubx",
+   "manipulation": "gain",
+   "from": "T2",
+   "to": "T3",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Contrabithorax (Cbx) dominant mutations express Ubx products inappropriately in the wing primordium, giving wing-to-haltere transformation (phenotype classical; paper documents the ectopic expression).",
+   "citation": {
+    "authors": "White RAH, Akam ME",
+    "year": 1985,
+    "title": "Contrabithorax mutations cause inappropriate expression of Ultrabithorax products in Drosophila",
+    "journal": "Nature",
+    "doi": "10.1038/318567a0"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-gain-dmel-embryo",
+   "gene": "Ubx",
+   "manipulation": "gain",
+   "from": "T2",
+   "to": "T3",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "embryo",
+   "summary": "Heat-shock Ubx in head and thorax overrides Scr and Antp and imposes its own (T3-like) program; abdominal segments A1-A8 stay normal.",
+   "citation": {
+    "authors": "González-Reyes A, Morata G",
+    "year": 1990,
+    "title": "The developmental effect of overexpressing a Ubx product in Drosophila embryos is dependent on its interactions with other homeotic products",
+    "journal": "Cell",
+    "doi": "10.1016/0092-8674(90)90533-k",
+    "pmid": "1970762"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-gain-dmel-an",
+   "gene": "Ubx",
+   "manipulation": "gain",
+   "from": "AN",
+   "to": "T3",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Heat-shock Ubx transformed antennae into legs (leg identity not specified; T3 assigned) and altered embryonic cuticle identities.",
+   "citation": {
+    "authors": "Mann RS, Hogness DS",
+    "year": 1990,
+    "title": "Functional dissection of ultrabithorax proteins in D. melanogaster",
+    "journal": "Cell",
+    "doi": "10.1016/0092-8674(90)90663-y",
+    "pmid": "2105847"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx-gain-bany-t2",
+   "gene": "Ubx",
+   "manipulation": "gain",
+   "from": "T2",
+   "to": "DELETED",
+   "species": "Bicyclus anynana",
+   "order": "Lepidoptera",
+   "stage": "embryo",
+   "summary": "Embryonic heat-shock Ubx: fused segments, loss of thoracic and abdominal limbs, enlarged head appendages. Larval shocks only reduced eyespots; no forewing-to-hindwing transformation.",
+   "citation": {
+    "authors": "Tong X et al.",
+    "year": 2014,
+    "title": "Over-expression of Ultrabithorax alters embryonic body plan and wing patterns in the butterfly Bicyclus anynana",
+    "journal": "Developmental Biology",
+    "doi": "10.1016/j.ydbio.2014.08.020",
+    "pmid": "25169193"
+   },
+   "verified": true
+  },
+  {
+   "id": "abdA-loss-dmel-ab",
+   "gene": "abdA",
+   "manipulation": "loss",
+   "from": "AB",
+   "to": "A1",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "embryo",
+   "summary": "Mutations in the abdominal BX-C region cause segmental transformations in segments 2-8 toward more anterior identity. Direction from classical BX-C genetics; abstract states only segmental transformations.",
+   "citation": {
+    "authors": "Karch F et al.",
+    "year": 1985,
+    "title": "The abdominal region of the bithorax complex",
+    "journal": "Cell",
+    "doi": "10.1016/0092-8674(85)90014-5",
+    "pmid": "3935319"
+   },
+   "verified": true
+  },
+  {
+   "id": "abdA-loss-tcas-ab",
+   "gene": "abdA",
+   "manipulation": "loss",
+   "from": "AB",
+   "to": "T2",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "stage": "embryo",
+   "summary": "abd-A, not Ubx, represses early Dll in the beetle abdomen; abd-A RNAi gives Dll-expressing abdominal appendages. Exact leg identity not stated in abstract (doubtful mapping).",
+   "citation": {
+    "authors": "Lewis DL, DeCamillis M, Bennett RL",
+    "year": 2000,
+    "title": "Distinct roles of the homeotic genes Ubx and abd-A in beetle embryonic abdominal appendage development",
+    "journal": "Proceedings of the National Academy of Sciences",
+    "doi": "10.1073/pnas.97.9.4504",
+    "pmid": "10781052"
+   },
+   "verified": true
+  },
+  {
+   "id": "abdA-gain-dmel-t2",
+   "gene": "abdA",
+   "manipulation": "gain",
+   "from": "T2",
+   "to": "T3",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Misexpressed abd-A converts wing into haltere and can fully replace Ubx in haltere development.",
+   "citation": {
+    "authors": "Casares F, Calleja M, Sánchez‐Herrero E",
+    "year": 1996,
+    "title": "Functional similarity in appendage specification by the Ultrabithorax and abdominal‐A Drosophila HOX genes.",
+    "journal": "The EMBO Journal",
+    "doi": "10.1002/j.1460-2075.1996.tb00767.x",
+    "pmid": "8670898"
+   },
+   "verified": true
+  },
+  {
+   "id": "abdA-gain-dmel-an",
+   "gene": "abdA",
+   "manipulation": "gain",
+   "from": "AN",
+   "to": "T3",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Misexpressed abd-A (like Ubx) transforms antennal tissue into leg tissue (leg identity not specified; T3 assigned).",
+   "citation": {
+    "authors": "Casares F, Calleja M, Sánchez‐Herrero E",
+    "year": 1996,
+    "title": "Functional similarity in appendage specification by the Ultrabithorax and abdominal‐A Drosophila HOX genes.",
+    "journal": "The EMBO Journal",
+    "doi": "10.1002/j.1460-2075.1996.tb00767.x",
+    "pmid": "8670898"
+   },
+   "verified": true
+  },
+  {
+   "id": "AbdB-loss-dmel-pa",
+   "gene": "AbdB",
+   "manipulation": "loss",
+   "from": "PA",
+   "to": "AB",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Abd-B m- clones in female A8 transform A8 into A4 (ordinary abdominal segment).",
+   "citation": {
+    "authors": "Foronda D et al.",
+    "year": 2006,
+    "title": "Requirement of Abdominal-A and Abdominal-B in the developing genitalia of Drosophila breaks the posterior downregulation rule",
+    "journal": "Development",
+    "doi": "10.1242/dev.02173",
+    "pmid": "16319117"
+   },
+   "verified": true
+  },
+  {
+   "id": "AbdB-loss-dmel-pa-genitalia",
+   "gene": "AbdB",
+   "manipulation": "loss",
+   "from": "PA",
+   "to": "GROUND",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Abd-B m- r- or r- clones in male A9 activate Dll and transform genitalia into leg or antenna.",
+   "citation": {
+    "authors": "Foronda D et al.",
+    "year": 2006,
+    "title": "Requirement of Abdominal-A and Abdominal-B in the developing genitalia of Drosophila breaks the posterior downregulation rule",
+    "journal": "Development",
+    "doi": "10.1242/dev.02173",
+    "pmid": "16319117"
+   },
+   "verified": true
+  },
+  {
+   "id": "AbdB-gain-dmel-an",
+   "gene": "AbdB",
+   "manipulation": "gain",
+   "from": "AN",
+   "to": "PA",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "adult",
+   "summary": "Tumorous-head Abd-B alleles are semidominant gain-of-function in the head, producing ectopic leg, genitalia or tergite structures.",
+   "citation": {
+    "authors": "Kuhn DT, Packert G",
+    "year": 1988,
+    "title": "Tumorous-head-type mutants of the distal bithorax complex cause dominant gain and recessive loss of function in Drosophila melanogaster",
+    "journal": "Developmental Biology",
+    "doi": "10.1016/0012-1606(88)90054-1",
+    "pmid": "3119403"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx+abdA+AbdB-loss-dmel",
+   "gene": "Ubx+abdA+AbdB",
+   "manipulation": "loss",
+   "from": "AB",
+   "to": "T2",
+   "species": "Drosophila melanogaster",
+   "order": "Diptera",
+   "stage": "larva",
+   "summary": "Deletion of the bithorax complex: segments from T3 posteriorly develop with mesothoracic-like identity (classical Lewis result; abstract not retrievable).",
+   "citation": {
+    "authors": "Lewis EB",
+    "year": 1978,
+    "title": "A gene complex controlling segmentation in Drosophila",
+    "journal": "Nature",
+    "doi": "10.1038/276565a0",
+    "pmid": "103000"
+   },
+   "verified": true
+  },
+  {
+   "id": "Dfd+Scr+Antp+Ubx+abdA-loss-tcas",
+   "gene": "Dfd+Scr+Antp+Ubx+abdA",
+   "manipulation": "loss",
+   "from": "T2",
+   "to": "GROUND",
+   "species": "Tribolium castaneum",
+   "order": "Coleoptera",
+   "stage": "embryo",
+   "summary": "Homozygous HOM-C deficiency spanning Deformed to abdominal-A: all gnathal, thoracic and abdominal segments develop antennae (ground state).",
+   "citation": {
+    "authors": "Stuart JJ et al.",
+    "year": 1991,
+    "title": "A deficiency of the homeotic complex of the beetle Tribolium",
+    "journal": "Nature",
+    "doi": "10.1038/350072a0",
+    "pmid": "11536480"
+   },
+   "verified": true
+  },
+  {
+   "id": "Ubx+abdA-loss-bmor-e",
+   "gene": "Ubx+abdA",
+   "manipulation": "loss",
+   "from": "AB",
+   "to": "T2",
+   "species": "Bombyx mori",
+   "order": "Lepidoptera",
+   "stage": "embryo",
+   "summary": "EN chromosome deletes Ubx and abd-A homologues; E-complex mutants alter larval abdominal identity. Leg-bearing direction (classical Itikawa phenotype) is not in the abstract: unverified.",
+   "citation": {
+    "authors": "Ueno K et al.",
+    "year": 1992,
+    "title": "Molecular analysis of the deletion mutants in the E homeotic complex of the silkworm Bombyx mori",
+    "journal": "Development",
+    "doi": "10.1242/dev.114.3.555",
+    "pmid": "1352236"
+   },
+   "verified": false
+  }
+ ]
+}

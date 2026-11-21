@@ -1,0 +1,215 @@
+{
+ "terms": [
+  {
+   "term": "abdomen",
+   "simple": "The abdomen is the back section of an insect's body.",
+   "more": "In the lab it covers segments A1 to A10. Insects usually have no legs here, and the last few segments form the tail end.",
+   "see": [
+    "segment",
+    "thorax"
+   ]
+  },
+  {
+   "term": "antenna",
+   "simple": "An antenna is a feeler on an insect's head that senses smells and touch.",
+   "more": "Insects have a pair. Antennae are what the front head segment grows when no Hox gene is active there.",
+   "see": [
+    "appendage",
+    "head"
+   ]
+  },
+  {
+   "term": "appendage",
+   "simple": "An appendage is a body part that sticks out from a segment, like a leg, antenna or wing.",
+   "more": "Hox genes help decide which appendage each segment grows.",
+   "see": [
+    "identity",
+    "segment"
+   ]
+  },
+  {
+   "term": "chromosome",
+   "simple": "A chromosome is a long strand of DNA that carries many genes.",
+   "more": "Hox genes sit close together on chromosomes, in roughly the same order as the body parts they control.",
+   "see": [
+    "colinearity",
+    "DNA",
+    "gene"
+   ]
+  },
+  {
+   "term": "colinearity",
+   "simple": "Colinearity means Hox genes sit in a row in the same order as the body parts they build.",
+   "more": "The first gene in the row works near the head, and the last gene works near the tail end.",
+   "see": [
+    "chromosome",
+    "Hox gene"
+   ]
+  },
+  {
+   "term": "DNA",
+   "simple": "DNA is the long molecule inside cells that stores the instructions for building a body.",
+   "more": "Genes are short stretches of DNA.",
+   "see": [
+    "chromosome",
+    "gene"
+   ]
+  },
+  {
+   "term": "elytron",
+   "simple": "An elytron is a hard wing cover on a beetle. The plural is elytra.",
+   "more": "Beetles grow elytra on T2 and fold their flying wings under them.",
+   "see": [
+    "thorax",
+    "wing"
+   ]
+  },
+  {
+   "term": "evidence",
+   "simple": "Evidence is proof from experiments that shows whether an idea is true.",
+   "more": "The lab labels each change as Documented, Model extrapolation, or Published result differs, so you can see how strong the evidence is.",
+   "see": [
+    "model",
+    "mutant"
+   ]
+  },
+  {
+   "term": "gene",
+   "simple": "A gene is a piece of DNA that holds one instruction for the body.",
+   "more": "Many genes hold the recipe for a protein, and proteins do much of the work in cells.",
+   "see": [
+    "DNA",
+    "protein"
+   ]
+  },
+  {
+   "term": "haltere",
+   "simple": "A haltere is a tiny knob behind a fly's wings that helps it balance in flight.",
+   "more": "Flies have halteres where other insects have a second pair of wings. They grow on T3.",
+   "see": [
+    "thorax",
+    "wing"
+   ]
+  },
+  {
+   "term": "head",
+   "simple": "The head is the front section of an insect's body. It holds the eyes, antennae and mouthparts.",
+   "more": "In the lab the head has five editable segments: An, Ic, Mn, Mx and Lb.",
+   "see": [
+    "antenna",
+    "mouthparts"
+   ]
+  },
+  {
+   "term": "Hox gene",
+   "simple": "A Hox gene is a master gene that tells a body segment what to become.",
+   "more": "Insects in this lab have eight Hox genes: lab, pb, Dfd, Scr, Antp, Ubx, abd-A and Abd-B. They make proteins that switch other genes on or off.",
+   "see": [
+    "gene",
+    "identity",
+    "protein"
+   ]
+  },
+  {
+   "term": "identity",
+   "simple": "A segment's identity is the instruction that says what it will grow.",
+   "more": "For example, T2 identity means a midleg and a wing. Hox genes set identity.",
+   "see": [
+    "Hox gene",
+    "segment"
+   ]
+  },
+  {
+   "term": "knockout",
+   "simple": "A knockout means switching a gene off to see what it does.",
+   "more": "Scientists compare the changed animal with a normal one to learn the gene's job. It is also called loss of function.",
+   "see": [
+    "gene",
+    "mutant"
+   ]
+  },
+  {
+   "term": "leg",
+   "simple": "A leg is a jointed limb that an insect walks with. Insects have six.",
+   "more": "They grow on the three thorax segments T1, T2 and T3, which give the foreleg, midleg and hindleg.",
+   "see": [
+    "appendage",
+    "thorax"
+   ]
+  },
+  {
+   "term": "model",
+   "simple": "A model is a simple copy of something real that helps us make predictions.",
+   "more": "The lab's model uses simple rules for how Hox genes set identity. It is useful but leaves out many real details.",
+   "see": [
+    "evidence",
+    "Hox gene"
+   ]
+  },
+  {
+   "term": "mouthparts",
+   "simple": "Mouthparts are the small parts around an insect's mouth that it uses to bite, chew or lick.",
+   "more": "They grow on head segments. Examples are the mandible (jaw), the maxilla and palps (feelers), and the labium (lower lip).",
+   "see": [
+    "appendage",
+    "head"
+   ]
+  },
+  {
+   "term": "mutant",
+   "simple": "A mutant is an animal with a change in one of its genes.",
+   "more": "Mutants can look different from normal animals, like a fly with four wings. Scientists study them to learn what genes do.",
+   "see": [
+    "gene",
+    "knockout"
+   ]
+  },
+  {
+   "term": "posterior",
+   "simple": "Posterior means toward the back, or the tail end.",
+   "more": "The opposite is anterior, which means toward the front. The back gene usually wins in the lab's rules.",
+   "see": [
+    "abdomen",
+    "Hox gene"
+   ]
+  },
+  {
+   "term": "protein",
+   "simple": "A protein is a tiny machine made by a cell, following the instructions in a gene.",
+   "more": "Hox proteins grab onto DNA and switch other genes on or off.",
+   "see": [
+    "DNA",
+    "gene"
+   ]
+  },
+  {
+   "term": "segment",
+   "simple": "A segment is one repeating piece in the row that makes up an insect's body.",
+   "more": "The lab has 18 editable segments: An, Ic, Mn, Mx, Lb, T1 to T3 and A1 to A10.",
+   "see": [
+    "identity",
+    "thorax"
+   ]
+  },
+  {
+   "term": "thorax",
+   "simple": "The thorax is the middle section of an insect's body. Legs and wings grow from it.",
+   "more": "It has three segments, T1, T2 and T3. T1 has a pair of legs. T2 and T3 each have legs and, in most insects, wings.",
+   "see": [
+    "abdomen",
+    "leg",
+    "wing"
+   ]
+  },
+  {
+   "term": "wing",
+   "simple": "A wing is a flat flap on an insect's body that it can use to fly.",
+   "more": "In the lab, wings grow on T2 and T3. Flies change the T3 wing into a haltere, and beetles change the T2 wing into an elytron.",
+   "see": [
+    "elytron",
+    "haltere",
+    "thorax"
+   ]
+  }
+ ]
+}

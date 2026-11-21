@@ -1,0 +1,71 @@
+{
+ "steps": [
+  {
+   "target": "#stage",
+   "title": "Meet the fruit fly",
+   "text": "This 3D fruit fly is a model of a real insect's body. Drag it to spin it around. Scroll or pinch to zoom in.",
+   "action": {
+    "species": "Drosophila melanogaster",
+    "reset": true
+   }
+  },
+  {
+   "target": "#splist",
+   "title": "Pick any insect",
+   "text": "Tap another insect in this list to see its body. Beetles, bees, butterflies and flies all have Hox genes too.",
+   "action": null
+  },
+  {
+   "target": "#tStain",
+   "title": "See the gene colours",
+   "text": "Tap <b>Hox stain</b> to colour each body segment by the Hox gene in charge of it. Hox genes are like bosses that tell each segment what to become.",
+   "action": null
+  },
+  {
+   "target": "#hoxgrid",
+   "title": "Switch genes on and off",
+   "text": "Each row is a gene. Each column is a body segment. Tap a square to switch that gene on or off there. A dot marks where the gene is normally on.",
+   "action": null
+  },
+  {
+   "target": "#preview",
+   "title": "Peek before you tap",
+   "text": "Point at a square, or tab to it, and this box tells you what would happen. Then tap to try it for real.",
+   "action": null
+  },
+  {
+   "target": "#preset",
+   "title": "A fly with four wings",
+   "text": "Here is the famous one: the <i>Ubx</i> gene is switched off in T3, the segment behind the wings. Watch the back of the fly: the tiny balancing knobs grow into a second pair of wings!",
+   "action": {
+    "preset": "ubx-ko"
+   }
+  },
+  {
+   "target": "#changes",
+   "title": "What changed?",
+   "text": "This list tells you, in plain words, which body parts changed and what they turned into.",
+   "action": null
+  },
+  {
+   "target": "#resetBtn",
+   "title": "Start over any time",
+   "text": "Press this to put the fly back to normal. Then make your own mutant, or press <b>Surprise me</b> for a random one.",
+   "action": {
+    "reset": true
+   }
+  },
+  {
+   "target": "#learnBtn",
+   "title": "Learn as you go",
+   "text": "The <b>Learn</b> button opens short lessons. Each one has a quiz and a button that sets up the lab for you.",
+   "action": null
+  },
+  {
+   "target": "#sciSw",
+   "title": "Want the science details?",
+   "text": "Flip <b>Scientist mode</b> on to see where the facts come from: the real gene IDs, the research behind each change, and more experiments to try.",
+   "action": null
+  }
+ ]
+}
